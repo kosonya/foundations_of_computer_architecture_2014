@@ -1,0 +1,57 @@
+------------------------------------------------------------------------------------------
+
+ README
+
+ Description:
+ Tomasulo algorithm simulator
+
+------------------------------------------------------------------------------------------
+1. Authors
+------------------------------------------------------------------------------------------
+
+ 1. Maxim Kovalev ( mkovalev@andrew.cmu.edu / maxim.kovalev@west.cmu.edu )
+
+ 2. Mridula Chappalli Srinivasa ( mchappal@andrew.cmu.edu / mridula.chappalli.srinivasa@sv.cmu.edu )
+
+------------------------------------------------------------------------------------------
+2. Overview
+------------------------------------------------------------------------------------------
+
+All the source code for this submission is written in C (may contain C99 syntax)
+and located in the following files:
+
+ 1. tomasulo.c
+
+ 2. tomasulo.h
+
+Additional file tomasulo_sim.o provided as a part of the assigment should also
+be in the same folder. The project is built by Makefile.
+
+------------------------------------------------------------------------------------------
+3. Compiling
+------------------------------------------------------------------------------------------
+
+To compile this project type "make" in its working directory. This ouputs
+an executable file "tomasulo_sim".
+
+------------------------------------------------------------------------------------------
+3. Running
+------------------------------------------------------------------------------------------
+
+tomasulo_sim reads traces from stdin. Thus, to run it you can type:
+
+ 1. ./tomasulo_sim < <paht_to_traces>/<plain_text_trace>
+
+ 2. cat <paht_to_traces>/<plain_text_trace> | ./tomasulo.sim
+
+ 3. zcat <paht_to_traces>/<compressed_trace>.gz | ./tomasule.sim
+
+Our code chacks for a file "config.default" in the current directory
+(thus, you should run tomasulo_sim in its directory rather than outside of it
+e.g. "cat <trace_file> | <path_to_simulator>/tomasulo_sim"), and if this file
+exists then its first line is interpreted as the number of reservation slots for
+the adder, and the second - the number of reservation slots for the multiplier.
+If the file is not found, 3 reservation slots for the adder and 5 reservation
+slots for the multiplier are assumed. Apparently, the simulator crashes if
+config.default is not present, but this is the problem with tomasulo_sim.o
+rather than our code.

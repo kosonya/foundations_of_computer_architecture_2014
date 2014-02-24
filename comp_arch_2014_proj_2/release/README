@@ -1,0 +1,55 @@
+
+------------------------------------------------------------------------------------------
+
+ README
+ Copyright (C) 2014 Carnegie Mellon University
+
+ Description:
+ 18-640 Project 2 Startup code 
+ 
+
+
+------------------------------------------------------------------------------------------
+1. Introduction
+------------------------------------------------------------------------------------------
+
+This document contains instructions on getting started with Project 2 using C.  This 
+package should contain the following files:
+
+   -tomasulo_sim.o is needed to compile the tomasulo executable
+    It is written in C and compiled on the greek machines.
+
+   -tomasulo.h has detailed descriptions of the functions you need to implement
+
+   -config.default is an example configuration file
+
+   -Makefile 
+
+   -Example trace.txt file
+
+
+
+------------------------------------------------------------------------------------------
+2. Overview
+------------------------------------------------------------------------------------------
+
+In this package, we are including a driver for your implementation of Tomasulo's algorithm.
+All of your additions should be self-contained under tomasulo.c. Please take the time
+to carefully read the comments in the tomasulo.h file.
+
+
+------------------------------------------------------------------------------------------
+3. Getting started
+------------------------------------------------------------------------------------------
+
+To make and test the simulator, type:
+
+"make"
+"./tomasulo_sim < trace.txt"
+
+Please be nice to our "trace parser" and don't try to break it.
+
+------------------------------------------------------------------------------------------
+Please don't hesitate to ask your TAs if you have any questions or uncertainties. 
+
+GOOD LUCK!

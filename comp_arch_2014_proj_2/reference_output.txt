@@ -1,0 +1,9 @@
+reg 0: 0                reg 1: 0                reg 2: 538              reg 3: 938
+reg 4: 0                reg 5: 0                reg 6: 0                reg 7: 0
+reg 8: 0                reg 9: 0                reg 10: 817             reg 11: 0
+reg 12: 0               reg 13: 0               reg 14: 155696          reg 15: 0
+reg 16: 0               reg 17: 157107          reg 18: 713             reg 19: 157107
+reg 20: 0               reg 21: 0               reg 22: 0               reg 23: 0
+reg 24: 155310          reg 25: 10250460        reg 26: 0               reg 27: 0
+reg 28: 0               reg 29: 0               reg 30: 10250460        reg 31: 1529
+Total Number of Cycles: 86

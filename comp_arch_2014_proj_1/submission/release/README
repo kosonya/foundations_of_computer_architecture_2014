@@ -1,0 +1,7 @@
+Group members : Maxim Kovalev(mkovalev@andrew.cmu.edu)
+                Mridula Chappalli Srinivasa Shastry(mchappal@andrew.cmu.edu)
+                
+To compile the code, please type make in the release directory and run it.
+
+This creates an executable file "predictor". Traces can be run against this file.
+

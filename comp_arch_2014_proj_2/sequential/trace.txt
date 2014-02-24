@@ -1,0 +1,4 @@
+mul r3 r13 r23
+add r20 r25 r29
+mul r13 r20 790
+add r2 r31 200
