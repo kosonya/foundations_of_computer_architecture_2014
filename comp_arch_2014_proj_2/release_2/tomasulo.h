@@ -64,6 +64,7 @@ typedef struct {
 	int op2;
 	int is_available;
 	int is_being_executed;
+	int time_spent_idle;
 } reservation_station;
 
 
@@ -146,9 +147,9 @@ int checkDone(int registerImage[NUM_REGISTERS]);
 //or -1 if there are no stations available
 int get_available_rs(reservation_station *rs_arr, int num_rs);
 
-int get_global_rs_id(int rs_num, instType instruction_type);
 
-void place_instruction(reservation_station rs, register_file rf, instruction_t *theInstruction);
+int get_least_recent_ready_rs(reservation_station *rs_arr, int num_rs);
 
+int rs_is_ready(reservation_station rs);
 
 #endif

@@ -1,0 +1,28 @@
+
+
+Total Number of Cycles: 7
+
+
+Total Number of Cycles: 86
+
+
+Med1: (1 cycle longer)
+our: Total Number of Cycles: 184
+reference: Total Number of Cycles: 183
+
+Med2: (1 cycle longer)
+our: Total Number of Cycles: 326
+reference: Total Number of Cycles: 325
+
+Med3: (6 cycles shorter)
+our: Total Number of Cycles: 578
+reference: Total Number of Cycles: 584
+
+Lar1: (1031 cycles longer)
+our: Total Number of Cycles: 841100
+reference: Total Number of Cycles: 840069
+
+Lar2: (1292 cycles longer)
+our: Total Number of Cycles: 840093
+reference: Total Number of Cycles: 838801
+

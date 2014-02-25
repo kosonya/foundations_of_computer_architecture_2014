@@ -57,6 +57,7 @@ void initTomasulo() {
 		add_rs[i].op1_tag = -1;
 		add_rs[i].op2_tag = -1;
 		add_rs[i].is_being_executed = 0;
+		add_rs[i].time_spent_idle = 0;
 	}
 
 	for(i = 0; i < mul_rs_num; i++) {
@@ -66,6 +67,7 @@ void initTomasulo() {
 		mul_rs[i].op1_tag = -1;
 		mul_rs[i].op2_tag = -1;
 		mul_rs[i].is_being_executed = 0;
+		mul_rs[i].time_spent_idle = 0;
 	}
 
 
@@ -143,28 +145,37 @@ void print()
 
 int execute(mathOp mathOpType, executeRequest_t *executeRequest) {
 	int i;
+
+	//Probably it's the best guess for equally incrementing all idle times
+	for(i = 0; i < add_rs_num; i++) {
+		add_rs[i].time_spent_idle++;
+	}
+	for(i = 0; i < mul_rs_num; i++) {
+		mul_rs[i].time_spent_idle++;
+	}
+
+
+
 	/*Execute any instruction in the reservation station that is ready*/
 	if(mathOpType == add) {
-		for(i = 0; i < add_rs_num; i++) {
-			if((!add_rs[i].is_available) &&((add_rs[i].op1_tag) == -1) && ((add_rs[i].op2_tag) == -1) &&(!add_rs[i].is_being_executed)) {
-				executeRequest->tag = (i<<1)|1;
-				executeRequest->op1 = add_rs[i].op1;
-				executeRequest->op2 = add_rs[i].op2;
-				add_rs[i].is_being_executed = 1;
-				//printf("Add from rs %d executed!\n", i);
-				return 1;
-			}
+		i = get_least_recent_ready_rs(add_rs, add_rs_num);
+		if (i != -1) {
+			executeRequest->tag = (i<<1)|1;
+			executeRequest->op1 = add_rs[i].op1;
+			executeRequest->op2 = add_rs[i].op2;
+			add_rs[i].is_being_executed = 1;
+			//printf("Add from rs %d executed!\n", i);
+			return 1;
 		}
 	} else {
-		for(i = 0; i < mul_rs_num; i++) {
-			if((!mul_rs[i].is_available) &&((mul_rs[i].op1_tag) == -1) && ((mul_rs[i].op2_tag) == -1)&&(!mul_rs[i].is_being_executed)) {
-				executeRequest->tag = (i<<1);
-				executeRequest->op1 = mul_rs[i].op1;
-				executeRequest->op2 = mul_rs[i].op2;
-				mul_rs[i].is_being_executed = 1;
-				//printf("Mul from rs %d executed!\n", i);
-				return 1;
-			}
+		i = get_least_recent_ready_rs(mul_rs, mul_rs_num);
+		if (i != -1) {
+			executeRequest->tag = (i<<1);
+			executeRequest->op1 = mul_rs[i].op1;
+			executeRequest->op2 = mul_rs[i].op2;
+			mul_rs[i].is_being_executed = 1;
+			//printf("Mul from rs %d executed!\n", i);
+			return 1;
 		}
 	}
 	return 0;
@@ -182,11 +193,13 @@ int issue(instruction_t *theInstruction) {
 		if (rs_to_dispatch == -1) {
 
 			//printf("After issue - not issued:\n");
-			print();
+			//print();
 
 			return 0;
 		}
 		add_rs[rs_to_dispatch].is_available = 0;
+		add_rs[rs_to_dispatch].is_being_executed = 0;
+		add_rs[rs_to_dispatch].time_spent_idle = 0;
 		/* Add the instruction to reservation station */
 
 		if(registerf.tags[theInstruction->op1] != -1) {
@@ -221,6 +234,8 @@ int issue(instruction_t *theInstruction) {
 			return 0;
 		}
 		mul_rs[rs_to_dispatch].is_available = 0;
+		mul_rs[rs_to_dispatch].is_being_executed = 0;
+		mul_rs[rs_to_dispatch].time_spent_idle = 0;
 		/* Add the instruction to reservation station */
 
 		if(registerf.tags[theInstruction->op1] != -1) {
@@ -280,12 +295,25 @@ int checkDone(int registerImage[NUM_REGISTERS]) {
 	return (1);
 }
 
-
-void place_instruction(reservation_station rs, register_file rf, instruction_t *theInstruction) {
-	int op1, op2;
-	if (theInstruction->instructionType == addImm || theInstruction->instructionType == multImm) {
-		op2 = theInstruction -> op2;
+int get_least_recent_ready_rs(reservation_station *rs_arr, int num_rs) {
+	int res = -1, i;
+	for(i = 0; i < num_rs; i++) {
+		if (res == -1) {
+			if(rs_is_ready(rs_arr[i])) {
+				res = i;
+			}
+		} else {
+			if(rs_is_ready(rs_arr[i])) {
+				if(rs_arr[i].time_spent_idle > rs_arr[res].time_spent_idle) {
+					res = i;
+				}
+			}
+		}
 	}
-	
+	return res;
 }
 
+
+int rs_is_ready(reservation_station rs) {
+	return (!rs.is_available) &&((rs.op1_tag) == -1) && ((rs.op2_tag) == -1)&&(!rs.is_being_executed);
+}
