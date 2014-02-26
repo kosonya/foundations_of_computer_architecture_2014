@@ -1,0 +1,42 @@
+\section{Implementation}
+
+\subsection{Data structures}
+
+\subsubsection{Reservation stations}
+
+There are two reservation stations in this simulator - one for the adder, and the other for the multiplier - that are both arrays of reservation station slots. One slot is a structure with two operand fields, two tag fields, an availablity flag, that indicates if this slot is ``empty'', an ``is being executed'' flag that indicates whther the instruction in this reservation station has been sent to ALU but not finished yet, and the counter for the number of cycles spent by the instruction in the reservation station to implement the QoS.
+
+\subsubsection{Register file}
+Register file consists of two arrays - register values and tags. Unlike in actuall processors, we don't use a busy bit, but simply indicate that there is the actual value in the register by setting the tag equal to -1.
+
+\subsection{Tagging algorithm}
+
+In our implementation we use two arrays for adder and multiplier reservation stations, both having indices starting from 0. A tag, however, should be a global indentifier of a reservatoin station, which is why we need to use a reversible algorithm for generating these tags. To do that, we left shift the index in the array by one bit, and if it is the adder reservation station, we write 1 to the least signigifant bit; otherwise we leave 0 there.
+
+\subsection{initTomasulo}
+
+In this function we first try to read the config file to determine the number of reservation stations. If the file is not found, we use 3 adder reservation stations and 5 multiplier ones. Then we allocate the memory for these stations, mark them as availbale, and then initialize registers to 0.
+
+\subsection{issue}
+
+In this function, we first try to determine if there is any available reservation station, depending on the type of the instruction. If there are no such stations, this instruction is not issued.
+
+Otherwise, we try to fetch its operands. If its second operand is a constant rather that a register value, we simply load it to the reservation station and set the tag to -1. Otherwise, we check if the tag in the corresponding resister is -1, meaning that the value can be used, it is loaded, and the tag in the reservation station is set to -1. Otherwise, we disregard the value and just copy the value of the tag. The same process is repeated for the first operand.
+
+The value of the counter of the cycles spent in the reservation station is set to 0.
+
+Finally, according to our tagging alrogithm, we calculate the tag for the selected reservation station, and write it to the tag field of the destination register.
+
+\subsection{execute}
+
+First of all, we use this function to increment the idle time counter for each used reservation station. Even if this function is called multiple times during one cycle, it increments the counters uniformly, thus making them directly proportional to the idle time. This can be done in every function that is guaranteed to be called the same number of times during each cycle, except for issue: in this case, some of the instuctions are not in the reservation stations yet, which is why it does not make sense to increment the counters.
+
+Then, depending on the type of the instuction, we check if there are any slots in the reservation stations ready to be executed (i.e. are not empty, have both tags equal to -1, and are not being already executed), find the one that has been sitting in the reservation station for the longest time, and pushes it to the execute request.
+
+\subsection{writeResult}
+
+This function implements CDB broadcasts. It iterates over all reservatoin stations and registers, writes the resuling values wehnever there is a tag match, and sets the tag to -1. Then, it determines from which reservation station this instruction came, and marks it as not being executed and available.
+
+\subsection{checkDone}
+
+This function verifies that all the registers have tags equal to -1, all the reservation stations are empty, and if that is true, it dumps the register values and stops the simulation.

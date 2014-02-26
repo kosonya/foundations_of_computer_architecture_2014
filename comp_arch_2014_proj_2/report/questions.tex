@@ -1,0 +1,45 @@
+\section{Questions}
+\begin{enumerate}
+    \item
+        {\bf Explain how Tomasulo's algorithm avoids WAW, RAW, WAR hazards. If we made the Instruction issue out-of-order, do any of these hazards now exist?}
+        
+    Read after Write dependencies are eliminated by the use of tags. If there is a pending write to the register, it is identified by a tag and when this register is listed as one of the operands in the reservation station, then the associated tag is copied to the reservation station instead of the value, thereby preventing RAW hazards. Also, the results of execution can be transferred to the operands waiting on that particular result in the reservation station and the registers directly through common data bus.(This is achieved through tag broadcast and matching).\cite{text}
+    
+    The write after read dependency is taken care of by copying the value in the register operand to the reservation station before it could be overwritten by another instruction.Due to this early copying mechanism, WAR hazards are avoided.
+\cite{text}
+
+   The write after write dependency is avoided by tag updation i.e the tag associated with a register is updated to a value reflecting the latest instruction to update that register, so that the earlier instruction that also had to write to the same destination register cannot overwrite the latest value.\cite{text}
+   
+   If the instructions are issued out of order, there is a possibility of Write After Read hazard, as the instruction at a later stage in the program can write to the register before an earlier instruction can read the operand from that particular register.
+    
+
+    \item
+        {\bf How did you generate tags in your implementation? Is this how you would do it in hardware?}
+        
+        The number of hardware tags to be generated is decided based on the number of contributers to the common data bus. We treat each tag as a 32-bit integer in our implementation. Since the number of tags is only determined by the number of reservation stations for this particular implementation, we could have used lesser number of bits to store the tag value.
+        
+        In addition, as the ``not tagged'' tag we used -1, which is difficult to implement in hardware. In this case we would use an additional bit, for distinguishing whether it is the actual value or a tag in the register, and disregard the tag or the value depending on this bit.
+        
+        Finally, since our simulator is programmed to work with any number of reservation stations, we use a relatively sophisticated technique to address two arrays of reservation stations, whose size is unknown in the compile time. In actual hardware the number of reservation stations is fixed, so it would be possible to employ a much simpler flat addressing mode.
+
+    \item
+        {\bf Try increasing the number of slots in your reservation stations and the maximum issue rate. Why does performance improve even though only 1 instruction can begin execution per cycle for a single reservation station? When is it better to increase the maximum instructions issued per cycle? When is it better to increase the number of reservations station slots?}
+        
+        The maximum instructions issued per cycle can be increased when there are fewer dependencies between the instructions (the operands of the instructions are available immediately to be executed) and the instructions are executed almost immediately after entering the reservation station(as the operands are already available).
+        
+        The number of reservation station slots can be increased if there are dependencies between instructions, i.e. if an instruction waiting on the availability of a particular operand can sit in the reservation station for a long time preventing the instruction that has all its operands ready(an independent instruction) from executing thereby causing unnecessary stalls. If the number of slots in the reservation stations are increased to accommadate these instructions, then the processor performance can be increased by enabling independent instructions to execute immediately.
+
+    \item
+        {\bf Although your implementation only had a single reservation station per functional unit, it is possible to have multiple reservation stations with same functionality (e.g., 4 separate reservation stations, each with a multiplier functional unit) to increase overall throughput. How does one choose the right number of reservation stations?}
+        
+        If there are large number of arithmetic instructions that utilize the functional units frequently, then by having each reservation slot associate with the appropriate functional unit, it is possible to increase the performance by faster execution of those instructions.Instructions need not stall waiting for the availability of the functional units. However, the cost of implementing the functional units in hardware is not trivial. Thereby the performance increase obtained by increasing the number of functional units should be justifiable wrt to hardware cost incurred.
+
+
+    \item
+        {\bf What changes would need to be made in order to support branches, loads and stores?}
+        We need buffers to store the data loaded from memory and store buffers to be implemented for store instructions. The load buffer should be able to transfer the operands to the reservation stations while the Store buffer should be able to pull the results immediately after execution(through the common data bus).
+We need to account for RAW dependencies between load and store instructions.
+
+One way of accounting for branch instructions is to stall the execution until the branches are resolved. We could have a reservation station for the branch instructions which could pull the outcome of the condition operation through common data bus(for conditional branches) and then issue appropriate instructions to the reservation stations.Other possibility is to use a branch prediction mechanism to predict the outcome of a branch and fetch and issue the appropriate instructions to the reservation stations.However, if the branch is mispredicted, then this can nullify the performance gain obtained by the out-of-order execution core.\cite{text}
+        
+\end{enumerate}

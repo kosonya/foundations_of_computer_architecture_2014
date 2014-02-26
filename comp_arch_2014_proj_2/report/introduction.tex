@@ -1,0 +1,12 @@
+\section{Introduction}
+
+In this project, we have implemented a variation of Tomasulo Algorithm for add and multiply instructions with register operands. This alrogithm in used to facilitate out-of-order execution by issuing inctuctions to special buffers called reservation stations, and executing instuctions simultaneously or in the order of true data dependencies rather than the order of issuing.
+
+With the default paramaters provided in the assignment, we have been able to achieve the speedup of over 400\% compared to in-order execution.
+
+\subsection{Sequential version}
+
+In order to verify the results, we have made two implementations of an in-order non-pipelined simulator. One was written from scratch in Python, and another was using the same tomasulo\_sim.o framework. Both ouputted exactly the same results, which we regard as a good evidence that both of them work correctly.
+
+Since by default Python uses arbitrary-precision arithmetic, we have discovered that even in small trace the values in registers go far beyond the capacity of 32-bit integer. Thus, we concluded that these traces highly depend on overflowing and switched to the 32-bit signed integer implementation provided by NumPy library
+
