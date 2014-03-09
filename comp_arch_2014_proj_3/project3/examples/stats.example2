@@ -1,0 +1,59 @@
+-------------------------------------------------------------------------------
+[L1-Data] Cache Size: 1k
+[L1-Data] Cache Associativity: 1
+[L1-Data] Cache Block Size: 32
+-------------------------------------------------------------------------------
+[L1-Inst] Cache Size: 1k
+[L1-Inst] Cache Associativity: 1
+[L1-Inst] Cache Block Size: 32
+-------------------------------------------------------------------------------
+[L2-Unif] Cache Size: 2k
+[L2-Unif] Cache Associativity: 1
+[L2-Unif] Cache Block Size: 32
+-------------------------------------------------------------------------------
+Dumping final stats at 20 references
+-------------------------------------------------------------------------------
+[L1-Inst] Accesses: 15
+[L1-Inst] Misses: 3
+
+[L1-Inst] Reads: 15
+[L1-Inst] Read misses: 3
+[L1-Inst] Read miss rate: 0.2
+[L1-Inst] Writes: 0
+[L1-Inst] Write misses: 0
+
+[L1-Inst] Miss rate: 0.2
+[L1-Inst] Clean evictions: 0
+[L1-Inst] Dirty writebacks: 0
+
+[L1-Inst] Checksum: 200266
+-------------------------------------------------------------------------------
+[L1-Data] Accesses: 5
+[L1-Data] Misses: 2
+
+[L1-Data] Reads: 5
+[L1-Data] Read misses: 2
+[L1-Data] Read miss rate: 0.4
+[L1-Data] Writes: 0
+[L1-Data] Write misses: 0
+
+[L1-Data] Miss rate: 0.4
+[L1-Data] Clean evictions: 0
+[L1-Data] Dirty writebacks: 0
+
+[L1-Data] Checksum: 5F7CB8
+-------------------------------------------------------------------------------
+[L2-Unif] Accesses: 5
+[L2-Unif] Misses: 5
+
+[L2-Unif] Reads: 5
+[L2-Unif] Read misses: 5
+[L2-Unif] Read miss rate: 1
+[L2-Unif] Writes: 0
+[L2-Unif] Write misses: 0
+
+[L2-Unif] Miss rate: 1
+[L2-Unif] Clean evictions: 0
+[L2-Unif] Dirty writebacks: 0
+
+[L2-Unif] Checksum: 3FBF6E

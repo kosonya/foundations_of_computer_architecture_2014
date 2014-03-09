@@ -1,9 +1,0 @@
----------------------------Final Statistics------------------------------
-Total branches: 12129319
-Total calls: 703491
-Total returns: 703489
-Correct directional predicts: 10439718
-Correct direction predicts/total branches: 0.860701
-
-Branch misprediction rate: 13.929892 percent
-

@@ -1,2 +1,0 @@
-Total branches: 145630057
-Average misprediction rate: 4.83481636635
