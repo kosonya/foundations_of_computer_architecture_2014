@@ -1,6 +1,6 @@
 /* Cache simulator header file */
 //
-// cache.h
+// cache.header
 // Copyright (C) 2005 Carnegie Mellon University
 //
 // Description:
@@ -9,28 +9,43 @@
 // All code changes go to cache.c
 //
 //
-#include <stdio.h>
+
 
 #ifndef _cache_
 #define _cache_
+#include <iostream>
+#include <string>
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
 
-typedef struct 
+class Cache
 {
-	unsigned int tag;
-	int valid;
-}cache_entry;
-
-typedef struct 
-{
+	public:
+	int cache_type;
 	int cache_size;
 	int block_size;
 	int associativity;
-}cache;
+};
+
+typedef struct
+{
+	unsigned int tag;
+	int valid;
+	int dirty_bit;
+}cache_entry;
+
+class cache_block
+{
+	int index;
+    /* array of cache entries */
+    cache_entry c_entry[block_size];
+    int lru_count[block_size];
+};
+
+typedef struct 
+{
+	int type;
+	char *address;
+}instruction;
 
 typedef struct 
 {
@@ -45,3 +60,13 @@ typedef struct
 	int forced_clean_evictions;
 	int forced_dirty_evictions;
 }cache_statistics;
+
+void init_cache();
+void read_config_file();
+bool find_cache_entry(instruction *inst);
+void place_cache_block(int index);
+void evict_cache_block(int index);
+void calculate_statistics(cache_statistics *stats);
+void print_statistics(cache_statistics *statistics);
+
+
