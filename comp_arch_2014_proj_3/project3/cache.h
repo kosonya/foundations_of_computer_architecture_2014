@@ -24,6 +24,10 @@ class Cache
 	int cache_size;
 	int block_size;
 	int associativity;
+
+	void place_cache_block(int index);
+	void evict_cache_block(int index);
+	bool find_cache_entry(instruction *inst);
 };
 
 typedef struct
@@ -39,6 +43,9 @@ class cache_block
     /* array of cache entries */
     cache_entry c_entry[block_size];
     int lru_count[block_size];
+
+    public:
+    	void update_lru_count(cache_entry c_entry);
 };
 
 typedef struct 
@@ -63,9 +70,6 @@ typedef struct
 
 void init_cache();
 void read_config_file();
-bool find_cache_entry(instruction *inst);
-void place_cache_block(int index);
-void evict_cache_block(int index);
 void calculate_statistics(cache_statistics *stats);
 void print_statistics(cache_statistics *statistics);
 
