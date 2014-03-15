@@ -43,11 +43,10 @@ class Set
 
 class Cache_block
 {
-	private:
-		int last_used_cycle;
-		unsigned int tag;	
-		int valid_bit;
-		int dirty_bit;  
+	int last_used_cycle;
+	unsigned int tag;	
+	int valid_bit;
+	int dirty_bit;  
 };
 
 typedef struct 
