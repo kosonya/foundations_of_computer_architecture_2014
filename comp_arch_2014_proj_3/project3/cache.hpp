@@ -44,7 +44,7 @@ class Set
 class Cache_block
 {
 	private:
-		int last_used_cycle;
+		unsigned long long int last_used_cycle;
 		unsigned int tag;	
 		int valid_bit;
 		int dirty_bit;  
