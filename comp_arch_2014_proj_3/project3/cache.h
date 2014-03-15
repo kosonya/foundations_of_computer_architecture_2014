@@ -24,6 +24,8 @@ class Cache
 	int cache_size;
 	int block_size;
 	int associativity;
+	int number_of_blocks = (cache_size)/(block_size * associativity);
+	Cache_block cache_block[number_of_blocks];
 };
 
 class Set
@@ -33,7 +35,7 @@ class Set
 	int lru_count[cache.associativity];
 };
 
-class cache_block
+class Cache_block
 {
 	unsigned int tag;	
 	int valid_bit;
