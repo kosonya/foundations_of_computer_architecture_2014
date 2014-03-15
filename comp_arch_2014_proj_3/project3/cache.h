@@ -24,28 +24,20 @@ class Cache
 	int cache_size;
 	int block_size;
 	int associativity;
-
-	void place_cache_block(int index);
-	void evict_cache_block(int index);
-	bool find_cache_entry(instruction *inst);
 };
 
-typedef struct
+class Set
 {
-	unsigned int tag;
-	int valid;
-	int dirty_bit;
-}cache_entry;
+	unsigned int index;
+	Cache cache;
+	int lru_count[cache.associativity];
+};
 
 class cache_block
 {
-	int index;
-    /* array of cache entries */
-    cache_entry c_entry[block_size];
-    int lru_count[block_size];
-
-    public:
-    	void update_lru_count(cache_entry c_entry);
+	unsigned int tag;	
+	int valid_bit;
+	int dirty_bit;  
 };
 
 typedef struct 
@@ -70,6 +62,9 @@ typedef struct
 
 void init_cache();
 void read_config_file();
+void place_cache_block(int index);
+void evict_cache_block(int index);
+bool find_cache_entry(instruction *inst);
 void calculate_statistics(cache_statistics *stats);
 void print_statistics(cache_statistics *statistics);
 
