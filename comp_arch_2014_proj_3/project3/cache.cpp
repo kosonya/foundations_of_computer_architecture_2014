@@ -1,14 +1,15 @@
-/* function to read the config file line by line and 
-set up initial cache parameter */
-#include <string>
-#include <bitset>
+#include "cache.hpp"
 
-void read_file(string filename)
-{
-
+int main() {
+	return 0;
 }
 
-bitset convert_hex_to_binary(string address)
-{
 
+
+Cache::Cache(int cache_size, int associativity, int block_size) {
+	;
+}
+
+Set::Set(int block_size, int associativity) {
+	;
 }

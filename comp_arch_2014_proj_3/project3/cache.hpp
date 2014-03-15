@@ -11,23 +11,22 @@
 //
 
 
-#ifndef _cache_
-#define _cache_
+#ifndef _CACHE_HPP_
+#define _CACHE_HPP_
+
+
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cstdint>
 
-
-class Cache
+class Cache_block
 {
-	public:
-		Cache(int cache_size, int associativity, int block_size);
 	private:
-		int number_of_blocks;
-		int cache_size;
-		int block_size;
-		int associativity;
-		std::vector<Set> sets;
+		uint64_t last_used_cycle;
+		uint32_t tag;	
+		int valid_bit;
+		int dirty_bit;  
 };
 
 class Set
@@ -41,22 +40,26 @@ class Set
 		std::vector<Cache_block> cache_blocks;
 };
 
-class Cache_block
+class Cache
 {
+	public:
+		Cache(int cache_size, int associativity, int block_size);
 	private:
-		unsigned long long int last_used_cycle;
-		unsigned int tag;	
-		int valid_bit;
-		int dirty_bit;  
+		int number_of_blocks;
+		int cache_size;
+		int block_size;
+		int associativity;
+		std::vector<Set> sets;
 };
 
-typedef struct 
+
+class Instruction
 {
 	int type;
-	char *address;
-}instruction;
+	uint32_t *address;
+};
 
-typedef struct 
+class Cache_Statistics
 {
 	unsigned int accesses;
 	unsigned int misses;
@@ -68,14 +71,6 @@ typedef struct
 	int dirty_writebacks;
 	int forced_clean_evictions;
 	int forced_dirty_evictions;
-}cache_statistics;
+};
 
-void init_cache();
-void read_config_file();
-void place_cache_block(int index);
-void evict_cache_block(int index);
-bool find_cache_entry(instruction *inst);
-void calculate_statistics(cache_statistics *stats);
-void print_statistics(cache_statistics *statistics);
-
-
+#endif
