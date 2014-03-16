@@ -27,38 +27,43 @@ class Cache_block
 	private:
 		uint64_t last_used_cycle;
 		uint32_t tag;	
-		int valid_bit;
-		int dirty_bit;  
+		bool valid_bit;
+		bool dirty_bit;  
 };
 
 class Set
 {
 	public:
-		Set(int block_size, int associativity);
+		Set(unsigned int block_size, unsigned int associativity);
 	private:
-		int available_blocks;
-		int block_size;
-		int associativity;
+		unsigned int available_blocks;
+		unsigned int block_size;
+		unsigned int associativity;
 		std::vector<Cache_block> cache_blocks;
 };
 
 class Cache
 {
 	public:
-		Cache(int cache_size, int associativity, int block_size);
+		Cache(unsigned int cache_size, unsigned int block_size, unsigned int associativity);
 	private:
-		int number_of_blocks;
-		int cache_size;
-		int block_size;
-		int associativity;
+		unsigned int number_of_blocks;
+		unsigned int cache_size;
+		unsigned int block_size;
+		unsigned int associativity;
 		std::vector<Set> sets;
 };
 
+enum Instruction_Type_t {PC = 0, LOAD = 1, STORE = 2};
 
 class Instruction
 {
-	int type;
-	uint32_t *address;
+	public:
+		Instruction();
+		friend std::ostream& operator<<(std::ostream& os, const Instruction& instruction);
+		friend std::istream& operator>>(std::istream& is, Instruction& instruction);
+		Instruction_Type_t type;
+		uint32_t address;
 };
 
 class Cache_Statistics

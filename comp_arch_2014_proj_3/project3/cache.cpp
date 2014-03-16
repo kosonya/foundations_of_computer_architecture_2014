@@ -8,6 +8,7 @@ const unsigned int BLOCK_BITS = 5, INDEX_BITS = 8;
 int main() {
 	uint64_t current_cycle;
 	Cache_Configurations cache_configurations;
+	Instruction instruction;
 	std::ifstream config_file;
 
 	config_file.open("config.deafult");
@@ -32,6 +33,9 @@ int main() {
 	unsigned int command_type, address, block_offset, index, tag;
 
 	std::cout << cache_configurations << std::endl;
+
+	std::cout << instruction << std::endl;
+
 	for(current_cycle = 0; !std::cin.eof(); current_cycle++) {
 		std::cin >> command_type;
 		std::cin >> std::hex >> address;
@@ -50,12 +54,17 @@ int main() {
 
 
 
-Cache::Cache(int cache_size, int associativity, int block_size) {
+Cache::Cache(unsigned int cache_size, unsigned int block_size, unsigned int associativity) {
 	;
 }
 
-Set::Set(int block_size, int associativity) {
+Set::Set(unsigned int block_size, unsigned int associativity) {
 	;
+}
+
+Instruction::Instruction() {
+	type = PC;
+	address = 0xDEADBEEF;
 }
 
 std::ostream& operator<<(std::ostream& os, const Cache_Configuration& cache_configuration) {
@@ -81,3 +90,28 @@ std::istream& operator>>(std::istream& is, Cache_Configurations& cache_configura
 	is >> cache_configurations.i_cache >> cache_configurations.d_cache >> cache_configurations.l2_cache;
 	return is;
 }
+
+std::ostream& operator<<(std::ostream& os, const Instruction& instruction) {
+	os << "Instuction type: ";
+	switch(instruction.type) {
+		case PC:
+			os << "PC";
+			break;
+		case LOAD:
+			os << "Load";
+			break;
+		case STORE:
+			os << "Store";
+			break;
+		default:
+			os << "Unknown";
+	}
+	os << "; Address: " << std::hex << instruction.address;
+	return os;
+}
+
+std::istream& operator>>(std::istream& is, Instruction& instruction){
+
+	return is;
+}
+
