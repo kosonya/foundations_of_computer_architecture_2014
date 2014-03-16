@@ -21,6 +21,21 @@
 #include <cstdint>
 #include <fstream>
 
+class Cache_Configuration {
+	public:
+		friend std::ostream& operator<<(std::ostream& os, const Cache_Configuration& cache_configuration);
+		friend std::istream& operator>>(std::istream& is, Cache_Configuration& cache_configuration);
+		unsigned int cache_size, block_size, associativity;
+
+};
+
+class Cache_Configurations {
+	public:
+		friend std::ostream& operator<<(std::ostream& os, const Cache_Configurations& cache_configurations);
+		friend std::istream& operator>>(std::istream& is, Cache_Configurations& cache_configurations);
+		Cache_Configuration i_cache, d_cache, l2_cache;
+		uint64_t start_counting_after;
+};
 
 class Cache_block
 {
@@ -34,7 +49,7 @@ class Cache_block
 class Set
 {
 	public:
-		Set(unsigned int block_size, unsigned int associativity);
+		Set(Cache_Configuration config);
 	private:
 		unsigned int available_blocks;
 		unsigned int block_size;
@@ -45,7 +60,7 @@ class Set
 class Cache
 {
 	public:
-		Cache(unsigned int cache_size, unsigned int block_size, unsigned int associativity);
+		Cache(Cache_Configuration config);
 	private:
 		unsigned int number_of_blocks;
 		unsigned int cache_size;
@@ -80,20 +95,6 @@ class Cache_Statistics
 	unsigned int forced_dirty_evictions;
 };
 
-class Cache_Configuration {
-	public:
-		friend std::ostream& operator<<(std::ostream& os, const Cache_Configuration& cache_configuration);
-		friend std::istream& operator>>(std::istream& is, Cache_Configuration& cache_configuration);
-		unsigned int cache_size, block_size, associativity;
 
-};
-
-class Cache_Configurations {
-	public:
-		friend std::ostream& operator<<(std::ostream& os, const Cache_Configurations& cache_configurations);
-		friend std::istream& operator>>(std::istream& is, Cache_Configurations& cache_configurations);
-		Cache_Configuration i_cache, d_cache, l2_cache;
-		uint64_t start_counting_after;
-};
 
 #endif

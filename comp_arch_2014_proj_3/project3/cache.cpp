@@ -34,10 +34,10 @@ int main() {
 
 	std::cout << cache_configurations << std::endl;
 
-	std::cout << instruction << std::endl;
+
 
 	for(current_cycle = 0; !std::cin.eof(); current_cycle++) {
-		std::cin >> command_type;
+/*		std::cin >> command_type;
 		std::cin >> std::hex >> address;
 		block_offset = address % (1<<BLOCK_BITS);
 		index = (address>>BLOCK_BITS) % (1<<INDEX_BITS);
@@ -46,6 +46,9 @@ int main() {
 		std::cout << "Command type: " << command_type << std::endl;
 		std::cout << "Address: " << std::hex << address << ", block offset: " << std::hex << block_offset;
 		std::cout << ", index: " << std::hex << index << ", tag: " << std::hex << tag << std::endl;
+*/
+		std::cin >> instruction;
+		std::cout << instruction << std::endl;
 
 	}
 
@@ -54,12 +57,16 @@ int main() {
 
 
 
-Cache::Cache(unsigned int cache_size, unsigned int block_size, unsigned int associativity) {
-	;
+Cache::Cache(Cache_Configuration config) {
+	cache_size = config.cache_size;
+	block_size = config.block_size;
+	associativity = config.associativity;
+	number_of_blocks = cache_size / (block_size * associativity);
 }
 
-Set::Set(unsigned int block_size, unsigned int associativity) {
-	;
+Set::Set(Cache_Configuration config) {
+	block_size = config.block_size;
+	associativity = config.associativity;
 }
 
 Instruction::Instruction() {
@@ -111,7 +118,22 @@ std::ostream& operator<<(std::ostream& os, const Instruction& instruction) {
 }
 
 std::istream& operator>>(std::istream& is, Instruction& instruction){
-
+	int tmp;
+	is >> tmp;
+	switch (tmp) {
+		case 0:
+			instruction.type = PC;
+			break;
+		case 1:
+			instruction.type = LOAD;
+			break;
+		case 2:
+			instruction.type = STORE;
+			break;
+		default:
+			;//TODO
+	}
+	is >> std::hex >> instruction.address;
 	return is;
 }
 
