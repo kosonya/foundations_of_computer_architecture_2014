@@ -11,6 +11,8 @@ class Cache
 {
 	public:
 		Cache(Cache_Configuration config);
+		get_bits(int size);
+		Is_hit(Instruction instruction);
 	private:
 		unsigned int number_of_blocks;
 		unsigned int cache_size;

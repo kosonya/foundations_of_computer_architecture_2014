@@ -57,5 +57,24 @@ int main() {
 
 	}
 
+	/* Check if the instruction/data is present in L1, if not check in L2 */
+	Cache *L1_I, *L2_U, *L1_D;
+	Instruction_Type_t type = instruction.get_instruction_type();
+	uint32_t instruction_address = instruction.get_instruction_address();
+	if(type == PC)
+	{
+		if((L1_I.Is_hit(instruction)) == true)
+			{
+				/* Update L1 cache statistics */
+			}
+		else
+		{
+			if(L2_U.Is_hit(instruction) == true)
+			{
+				/* Update L2 Cache statistics */
+			}
+		}
+	}
+
 	return 0;
 }

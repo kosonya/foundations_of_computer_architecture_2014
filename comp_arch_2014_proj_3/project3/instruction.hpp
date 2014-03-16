@@ -9,6 +9,8 @@ class Instruction
 {
 	public:
 		Instruction();
+		get_instruction_address();
+		get_instruction_type();
 		friend std::ostream& operator<<(std::ostream& os, const Instruction& instruction);
 		friend std::istream& operator>>(std::istream& is, Instruction& instruction);
 		Instruction_Type_t type;

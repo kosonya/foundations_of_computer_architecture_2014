@@ -30,7 +30,8 @@ int Cache::get_bits(int size)
 
 bool Cache::Is_hit(Instruction inst)
 {
-	unsigned int address, index, tag, current_set;
+	unsigned int index, tag, current_set;
+	uint32_t address;
 	address = inst.get_instruction_address();
     index = (address >> (Cache.get_bits(block_size))) % (1 << (Cache.get_bits(number_of_sets)));
     tag = address>>((Cache.get_bits(block_size))+ (Cache.get_bits(number_of_sets)));

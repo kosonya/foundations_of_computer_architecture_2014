@@ -13,6 +13,17 @@ Set::Set(Cache_Configuration config) {
 	}
 }
 
+void Set::Evict_Cache_Block()
+{
+	uint64_t oldest_block;
+	 for(unsigned int i = 1; i < associativity; i++)
+	 {
+	 	if(cache_blocks[i].last_used_cycle < cache_blocks[i - 1].last_used_cycle)
+	 	{
+	 		oldest_block = cache_blocks[i].last_used_cycle;
+	 	}
+	 }
+}
 Set::~Set() {
 	cache_blocks.clear();
 }
