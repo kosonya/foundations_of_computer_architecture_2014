@@ -11,13 +11,13 @@ int main() {
 	uint64_t current_cycle;
 	Cache_Configurations cache_configurations;
 	Instruction instruction;
-	std::ifstream config_file;
+	std::ifstream config_file("config.default");
 
-	config_file.open("config.deafult");
 	if(config_file.is_open()) {
 		config_file >> cache_configurations;
 		config_file.close();
 	} else {
+		std::cout << "Something is wrong with confing file; using default parameters" << std::endl;
 		cache_configurations.i_cache.cache_size = 8192;
 		cache_configurations.i_cache.block_size = 32;
 		cache_configurations.i_cache.associativity = 1;
@@ -33,10 +33,13 @@ int main() {
 	int a;
 	std::string str;
 	unsigned int command_type, address, block_offset, index, tag;
+	Cache *test_cache;
+
 
 	std::cout << cache_configurations << std::endl;
-
-
+	test_cache = new Cache(cache_configurations.i_cache);
+	std::cout << *test_cache << std::endl;
+	delete test_cache;
 
 	for(current_cycle = 0; !std::cin.eof(); current_cycle++) {
 /*		std::cin >> command_type;

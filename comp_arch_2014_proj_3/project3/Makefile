@@ -11,7 +11,7 @@ clean:
 cache_simulator: $(OBJECTS)
 	$(CPPCOMPILER) -o $(EXECUTABLE) $(OBJECTS)
 
-cache_block.o: cache_block.cpp cache_block.hpp cache_configuration.hpp
+cache_block.o: cache_block.cpp cache_block.hpp
 	$(CPPCOMPILER) $(CPPFLAGS) -c -o cache_block.o cache_block.cpp
 
 cache_configuration.o: cache_configuration.cpp cache_configuration.hpp
@@ -26,7 +26,7 @@ cache_statistics.o: cache_statistics.cpp cache_statistics.hpp
 instruction.o: instruction.cpp instruction.hpp
 	$(CPPCOMPILER) $(CPPFLAGS) -c -o instruction.o instruction.cpp
 
-set.o: set.cpp set.hpp cache_configuration.hpp
+set.o: set.cpp set.hpp cache_configuration.hpp cache_block.hpp
 	$(CPPCOMPILER) $(CPPFLAGS) -c -o set.o set.cpp
 
 main.o: main.cpp cache.hpp cache_configuration.hpp instruction.hpp
