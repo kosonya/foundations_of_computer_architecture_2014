@@ -16,6 +16,45 @@ Cache::Cache(Cache_Configuration config) {
 	}
 }
 
+int Cache::get_bits(int size)
+{
+	int count = 0;
+	while(size!= 1)
+	{
+		count++;
+		size = size/2;
+	}
+	return count;
+}
+
+
+bool Cache::Is_hit(Instruction inst)
+{
+	unsigned int address, index, tag, current_set;
+	address = inst.get_instruction_address();
+    index = (address >> (Cache.get_bits(block_size))) % (1 << (Cache.get_bits(number_of_sets)));
+    tag = address>>((Cache.get_bits(block_size))+ (Cache.get_bits(number_of_sets)));
+    /* Iterate through the sets */
+	for(int i = 0; i < number_of_sets; i++)
+	{
+		if(index == sets[i])
+		{
+			current_set = sets[i];
+		}
+	}
+    /* Iterate through the cache blocks */
+	for(int i = 0; i < associativity; i++)
+	{
+		if(tag == current_set.cache_blocks[i].tag)
+		{
+			return true;
+			break;
+		}
+	}
+
+	return false;	   
+}
+
 Cache::~Cache() {
 	sets.clear();
 }

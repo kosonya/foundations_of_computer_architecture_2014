@@ -6,6 +6,10 @@ Instruction::Instruction() {
 	address = 0xDEADBEEF;
 }
 
+int Instruction::get_instruction_address()
+{
+	return address;
+}
 std::ostream& operator<<(std::ostream& os, const Instruction& instruction) {
 	os << "Instuction type: ";
 	switch(instruction.type) {
