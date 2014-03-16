@@ -19,6 +19,8 @@
 #include <string>
 #include <vector>
 #include <cstdint>
+#include <fstream>
+
 
 class Cache_block
 {
@@ -67,10 +69,26 @@ class Cache_Statistics
 	unsigned int read_misses;
 	unsigned int writes;
 	unsigned int write_misses;
-	int clean_evictions;
-	int dirty_writebacks;
-	int forced_clean_evictions;
-	int forced_dirty_evictions;
+	unsigned int clean_evictions;
+	unsigned int dirty_writebacks;
+	unsigned int forced_clean_evictions;
+	unsigned int forced_dirty_evictions;
+};
+
+class Cache_Configuration {
+	public:
+		friend std::ostream& operator<<(std::ostream& os, const Cache_Configuration& cache_configuration);
+		friend std::istream& operator>>(std::istream& is, Cache_Configuration& cache_configuration);
+		unsigned int cache_size, block_size, associativity;
+
+};
+
+class Cache_Configurations {
+	public:
+		friend std::ostream& operator<<(std::ostream& os, const Cache_Configurations& cache_configurations);
+		friend std::istream& operator>>(std::istream& is, Cache_Configurations& cache_configurations);
+		Cache_Configuration i_cache, d_cache, l2_cache;
+		uint64_t start_counting_after;
 };
 
 #endif
