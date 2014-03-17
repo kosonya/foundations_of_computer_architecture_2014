@@ -131,8 +131,12 @@ Cache_Access_Result cache_read(Cache *l1_cache, Cache *l2_cache, Instruction ins
 				if (l1_cache -> is_hit(cache_access_result.evicted_address)) 
 				{
 					std::cout << "Evicted block found in L1, forcefully evicting" << std::endl;
-					l1_cache -> forced_clean_evictions++;
+					l1_cache -> stats.forced_clean_evictions++;
 					l1_cache -> evict_block(cache_access_result.evicted_address);
+					if((l1_cache -> get_dirty_bit(cache_access_result.evicted_address)) == true)
+					{
+						l1_cache ->stats.forced_dirty_writebacks++;
+					}
 				} 
 				else
 				{
@@ -161,6 +165,7 @@ Cache_Access_Result cache_write(Cache *l1_cache, Cache *l2_cache, Instruction in
 	}
 	else
 	{
+		l1_cache->stats.write_misses++;
 		std::cout << "L1 cache miss - trying L2 cache" << std::endl;
 		show_cache_tag_index_bo(l2_cache, instruction);
 		if(l2_cache->is_hit(instruction.get_address()))
@@ -174,6 +179,7 @@ Cache_Access_Result cache_write(Cache *l1_cache, Cache *l2_cache, Instruction in
 	
 		else 
 		{
+			l2_cache->stats.write_misses++;
 			std::cout << "L2-cache miss, allocating a block" << std::endl;
 			cache_access_result = store_block_in_cache_write(l2_cache, instruction, current_cycle, true);
 			if(cache_access_result.allocated_without_eviction) 
