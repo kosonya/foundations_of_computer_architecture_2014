@@ -47,28 +47,7 @@ uint32_t Cache::get_tag(uint32_t address)
 
 bool Cache::is_hit(uint32_t address)
 {
-	/*unsigned int index, tag, current_set;
-    index = (address >> (Cache.get_bits(block_size))) % (1 << (Cache.get_bits(number_of_sets)));
-    tag = address>>((Cache.get_bits(block_size))+ (Cache.get_bits(number_of_sets)));
-    //Iterate through the sets 
-	for(int i = 0; i < number_of_sets; i++)
-	{
-		if(index == sets[i])
-		{
-			current_set = sets[i];
-		}
-	}
-    // Iterate through the cache blocks 
-	for(int i = 0; i < associativity; i++)
-	{
-		if(tag == current_set.cache_blocks[i].tag)
-		{
-			return true;
-			break;
-		}
-	}
-*/
-	return false;	   
+	return sets[this -> get_index(address)].is_hit(this -> get_tag(address));	   
 }
 
 Cache::~Cache() {

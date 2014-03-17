@@ -30,6 +30,23 @@ Set::~Set() {
 	cache_blocks.clear();
 }
 
+bool Set::is_hit(uint32_t tag)
+{
+	if (available_blocks == associativity)
+	{
+		return false;
+	}
+	for(std::vector<Cache_block>::iterator it = cache_blocks.begin(); it != cache_blocks.end(); ++it)
+	{
+		if(it -> tag == tag && !(it -> is_available) )
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+
 std::ostream& operator<<(std::ostream& os, const Set& set) {
 	os << "\t" << "Block size: " << set.block_size;
 	os << "; Associativity: " << set.associativity;
