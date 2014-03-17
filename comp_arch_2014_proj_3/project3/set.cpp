@@ -80,6 +80,17 @@ void Set::set_dirty_bit(uint32_t tag)
 	}
 }
 
+bool Set::get_dirty_bit(uint32_t tag)
+{
+	for(std::vector<Cache_block>::iterator it = cache_blocks.begin(); it!= cache_blocks.end(); ++it)
+	{
+		if((it -> tag) == tag)
+		{
+			return (it -> dirty_bit);
+		}
+	}	
+}
+
 int Set::allocate_block(uint32_t tag, uint64_t cycle)
 {
 	for(std::vector<Cache_block>::iterator it = cache_blocks.begin(); it != cache_blocks.end(); ++it)

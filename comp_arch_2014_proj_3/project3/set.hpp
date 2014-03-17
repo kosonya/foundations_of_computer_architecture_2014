@@ -20,6 +20,7 @@ class Set
 		uint32_t find_lru_block(); //returns the tag of least recently used block within this set. Should be only called if there's no available blocks
 		int allocate_block_for_write(uint32_t tag, uint64_t cycle);
 		void set_dirty_bit(uint32_t tag);
+		bool get_dirty_bit(uint32_t tag);
 	private:
 		unsigned int available_blocks;
 		unsigned int block_size;

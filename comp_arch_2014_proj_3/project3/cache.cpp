@@ -79,6 +79,11 @@ void Cache::set_dirty_bit(uint32_t address)
 	return sets[this -> get_index(address)].set_dirty_bit(this -> get_tag(address));
 }
 
+bool Cache::get_dirty_bit(uint32_t address)
+{
+	return sets[this -> get_index(address)].get_dirty_bit(this -> get_tag(address));
+}
+
 uint32_t Cache::find_lru_block(uint32_t address)
 {
 	return (sets[this -> get_index(address)].find_lru_block() << (block_offset_bit_width + index_bit_width)) | ( (this -> get_index(address)) << block_offset_bit_width);
