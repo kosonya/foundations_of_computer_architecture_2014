@@ -17,7 +17,7 @@ cache_block.o: cache_block.cpp cache_block.hpp
 cache_configuration.o: cache_configuration.cpp cache_configuration.hpp
 	$(CPPCOMPILER) $(CPPFLAGS) -c -o cache_configuration.o cache_configuration.cpp
 
-cache.o: cache.cpp cache.hpp cache_configuration.hpp set.hpp
+cache.o: cache.cpp cache.hpp cache_configuration.hpp set.hpp cache_statistics.hpp
 		$(CPPCOMPILER) $(CPPFLAGS) -c -o cache.o cache.cpp
 
 cache_statistics.o: cache_statistics.cpp cache_statistics.hpp

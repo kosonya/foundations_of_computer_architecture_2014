@@ -3,6 +3,7 @@
 
 #include "cache.hpp"
 #include "cache_configuration.hpp"
+#include "cache_statistics.hpp"
 #include "set.hpp"
 #include <vector>
 #include <cstdint>
@@ -12,6 +13,7 @@ class Cache
 	public:
 		Cache(Cache_Configuration config);
 		~Cache();
+		Cache_Statistics stats;
 		bool is_hit(uint32_t address);
 		friend std::ostream& operator<<(std::ostream& os, const Cache& cache);
 		uint32_t get_index(uint32_t address);
