@@ -13,16 +13,19 @@ Set::Set(Cache_Configuration config) {
 	}
 }
 
-void Set::evict_cache_block()
+Cache_block Set::evict_cache_block()
 {
-	uint64_t oldest_block;
+	uint64_t oldest_block_cycle = cache_blocks[i - 1].last_used_cycle;
+	Cache_block oldest_block;
 	 for(unsigned int i = 1; i < associativity; i++)
 	 {
-	 	if(cache_blocks[i].last_used_cycle < cache_blocks[i - 1].last_used_cycle)
+	 	if(cache_blocks[i].last_used_cycle < oldest_block)
 	 	{
-	 		oldest_block = cache_blocks[i].last_used_cycle;
+	 		oldest_block_cycle = cache_blocks[i].last_used_cycle;
+	 		oldest_block = cache_blocks[i];
 	 	}
 	 }
+	 return oldest_block;
 }
 
 
