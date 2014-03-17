@@ -69,6 +69,12 @@ int Cache::allocate_block(uint32_t address, uint64_t cycle)
 	return sets[this -> get_index(address)].allocate_block(this -> get_tag(address), cycle);
 }
 
+uint32_t Cache::find_lru_block(uint32_t address)
+{
+	return (sets[this -> get_index(address)].find_lru_block() << (block_offset_bit_width + index_bit_width)) | ( (this -> get_index(address)) << block_offset_bit_width);
+
+}
+
 std::ostream& operator<<(std::ostream& os, const Cache& cache) {
 	os << "Cache size: " << std::dec << cache.cache_size;
 	os << "; Block size: " << std::dec << cache.block_size;

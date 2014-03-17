@@ -84,6 +84,24 @@ int Set::allocate_block(uint32_t tag, uint64_t cycle)
 	return -1;
 }
 
+uint32_t Set::find_lru_block()
+{
+	std::vector<Cache_block>::iterator it = cache_blocks.begin();
+	uint32_t res = it -> tag;
+	uint64_t lru = it -> last_used_cycle;
+	for(++it; it != cache_blocks.end(); ++it)
+	{
+		if(it -> last_used_cycle < lru)
+		{
+			lru = it -> last_used_cycle;
+			res = it -> tag;
+		}
+	}
+	return res;
+
+}
+
+
 std::ostream& operator<<(std::ostream& os, const Set& set) {
 	os << "\t" << "Block size: " << std::dec << set.block_size;
 	os << "; Associativity: " << std::dec << set.associativity;

@@ -12,7 +12,9 @@ int main() {
 	uint64_t current_cycle;
 	Cache_Configurations cache_configurations;
 	Instruction instruction;
-	Cache *test_cache;
+	uint64_t address_to_evict;
+
+
 	std::ifstream config_file("config.default");
 
 	if(config_file.is_open()) {
@@ -24,8 +26,11 @@ int main() {
 
 
 	std::cout << cache_configurations << std::endl;
-	test_cache = new Cache(cache_configurations.i_cache);
 
+
+
+	Cache *test_cache;
+	test_cache = new Cache(cache_configurations.i_cache);
 	std::cout << *test_cache << std::endl;
 
 
@@ -50,6 +55,9 @@ int main() {
 				std::cout << *test_cache << std::endl;
 			} else {
 				std::cout << "No available blocks, we need to evict something" << std::endl;
+				address_to_evict = test_cache -> find_lru_block(instruction.get_address());
+				std::cout << "Will evict the block with index 0x" << std::hex <<  test_cache -> get_index(address_to_evict);
+				std::cout << " and tag 0x" << std::hex << test_cache -> get_tag(address_to_evict) << std::endl;
 			}
 		}
 		std::cout << std::endl << std::endl;

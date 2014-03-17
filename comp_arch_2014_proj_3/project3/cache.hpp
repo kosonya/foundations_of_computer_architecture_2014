@@ -20,6 +20,13 @@ class Cache
 		bool has_available_blocks(uint32_t address);
 		int update_cycle_counter(uint32_t address, uint64_t cycle); //returns -1 if block is not found; 0 if executed successfuly
 		int allocate_block(uint32_t address, uint64_t cycle); //returns -1 if no space is found; 0 if executed successfuly
+
+
+		uint32_t find_lru_block(uint32_t address);
+		//returns the address (with block offset bits all equal to 0) of the least recently used block
+		//within the set where the input address could be put
+
+
 		
 	private:
 

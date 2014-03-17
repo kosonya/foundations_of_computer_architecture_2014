@@ -17,6 +17,7 @@ class Set
 		bool has_available_blocks();
 		int update_cycle_counter(uint32_t tag, uint64_t cycle); //returns -1 if block is not found; 0 if executed successfuly
 		int allocate_block(uint32_t tag, uint64_t cycle); //returns -1 if no space is found; 0 if executed successfuly
+		uint32_t find_lru_block(); //returns the tag of least recently used block within this set. Should be only called if there's no available blocks
 
 	private:
 		unsigned int available_blocks;
