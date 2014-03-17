@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <string>
 
 
 class Cache_Access_Result {
@@ -45,6 +46,13 @@ int main() {
 	d_cache = new Cache(cache_configurations.d_cache);
 	l2_cache = new Cache(cache_configurations.l2_cache);
 
+	std::string tmp("[L1-Inst]");
+	i_cache -> stats.prefix = tmp;
+	tmp = "[L1-Data]";
+	d_cache -> stats.prefix = tmp;
+	tmp = "[L2-Unif]";
+	l2_cache -> stats.prefix = tmp;	
+
 
 	for(current_cycle = 0; !std::cin.eof(); current_cycle++) {
 
@@ -57,24 +65,27 @@ int main() {
 
 		switch(instruction.type) {
 			case PC:
-					std::cout << "I-cache" << std::endl;
+					std::cout << "I-cache" << std::endl;					
 					cache_read(i_cache, l2_cache, instruction, current_cycle, true);
+					i_cache->stats.accesses++;
+					i_cache->stats.reads++;
 					break;
 
 			case LOAD:
 					std::cout << "D-cache" << std::endl;
 					cache_read(d_cache, l2_cache, instruction, current_cycle, true);
+					d_cache->stats.accesses++;
+					d_cache->stats.reads++;
 					break;
 			case STORE:
 					std::cout << "D-cache" << std::endl;
 					//show_cache_tag_index_bo(d_cache, instruction);
 					cache_write(d_cache, l2_cache, instruction, current_cycle, true);
+					d_cache->stats.accesses++;
+					d_cache->stats.writes++;
 					break;
-
 		}
-
-		std::cout << std::endl << std::endl << std::endl;
-
+		std::cout << std::endl << std::endl << std::endl;	
 	}
 
 	return 0;
@@ -85,31 +96,44 @@ Cache_Access_Result cache_read(Cache *l1_cache, Cache *l2_cache, Instruction ins
 	Cache_Access_Result cache_access_result;
 	uint64_t address_to_evict;
 	show_cache_tag_index_bo(l1_cache, instruction);
-	if (l1_cache -> is_hit(instruction.get_address())) {
+	if (l1_cache -> is_hit(instruction.get_address())) 
+	{
 		std::cout << "L1-cache hit, updating cycle counter" << std::endl;
 		l1_cache -> update_cycle_counter(instruction.get_address(), current_cycle);
-	} else {
+	} 
+	else
+	{	
+		l1_cache -> stats.
 		std::cout << "Miss, trying L2-cache" << std::endl;
 		show_cache_tag_index_bo(l2_cache, instruction);
-		if (l2_cache -> is_hit(instruction.get_address())) {
+		if (l2_cache -> is_hit(instruction.get_address())) 
+		{
 			std::cout << "L2-cache hit, updating cycle counter" << std::endl;
 			l2_cache -> update_cycle_counter(instruction.get_address(), current_cycle);
 			std::cout << "Allocating a block in L1-cache" << std::endl;
 			store_block_in_cache(l1_cache, instruction, current_cycle, true);
-		} else {
+		} 
+		else 
+		{
 			std::cout << "L2-cache miss, allocaking a block" << std::endl;
 			cache_access_result = store_block_in_cache(l2_cache, instruction, current_cycle, true);
-			if(cache_access_result.allocated_without_eviction) {
+			if(cache_access_result.allocated_without_eviction) 
+			{
 				std::cout << "Block in L2 allocated without evictions, no force L1 evictions needed" << std::endl;
 				std::cout << "Checking if we can allocate a block in L1" << std::endl;
 				cache_access_result = store_block_in_cache(l1_cache, instruction, current_cycle, true);
-			} else {
+			} 
+			else 
+			{
 				std::cout << "Block 0x" << std::hex << cache_access_result.evicted_address << " evicted from L2" << std::endl;
 				std::cout << "Checking if it's in L1" << std::endl;
-				if (l1_cache -> is_hit(cache_access_result.evicted_address)) {
+				if (l1_cache -> is_hit(cache_access_result.evicted_address)) 
+				{
 					std::cout << "Evicted block found in L1, forcefully evicting" << std::endl;
 					l1_cache -> evict_block(cache_access_result.evicted_address);
-				} else {
+				} 
+				else
+				{
 					std::cout << "Evicted block not found in L1, no need for forced eviction" << std::endl;
 				}
 				std::cout << "Checking if we can allocate a block in L1" << std::endl;
