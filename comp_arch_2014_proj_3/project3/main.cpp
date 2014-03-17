@@ -67,8 +67,8 @@ int main() {
 					break;
 			case STORE:
 					std::cout << "D-cache" << std::endl;
-					show_cache_tag_index_bo(d_cache, instruction);
-					//TODO
+					//show_cache_tag_index_bo(d_cache, instruction);
+					cache_write(d_cache, l2_cache, instruction, current_cycle, true);
 					break;
 
 		}
