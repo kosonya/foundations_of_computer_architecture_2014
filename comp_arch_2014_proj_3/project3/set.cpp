@@ -17,22 +17,6 @@ Set::~Set() {
 	cache_blocks.clear();
 }
 
-Cache_block Set::evict_cache_block()
-{
-	//uint64_t oldest_block_cycle = cache_blocks[i - 1].last_used_cycle;
-	uint64_t oldest_block_cycle = cache_blocks[0].last_used_cycle;
-	Cache_block oldest_block;
-/*	unsigned int i;
-	 for(i = 1; i < associativity; i++)
-	 {
-	 	if(cache_blocks[i].last_used_cycle < oldest_block)
-	 	{
-	 		oldest_block_cycle = cache_blocks[i].last_used_cycle;
-	 		oldest_block = cache_blocks[i];
-	 	}
-	 }*/
-	 return oldest_block;
-}
 
 bool Set::has_available_blocks()
 {
@@ -101,6 +85,19 @@ uint32_t Set::find_lru_block()
 
 }
 
+int Set::evict_block(uint32_t tag)
+{
+	for(std::vector<Cache_block>::iterator it = cache_blocks.begin(); it != cache_blocks.end(); ++it)
+	{
+		if(it -> tag == tag)
+		{
+			it -> is_available = true;
+			available_blocks++;
+			return 0;
+		}
+	}
+	return -1;
+}
 
 std::ostream& operator<<(std::ostream& os, const Set& set) {
 	os << "\t" << "Block size: " << std::dec << set.block_size;

@@ -75,6 +75,11 @@ uint32_t Cache::find_lru_block(uint32_t address)
 
 }
 
+int Cache::evict_block(uint32_t address)
+{
+	return sets[this -> get_index(address)].evict_block(this -> get_tag(address));
+}
+
 std::ostream& operator<<(std::ostream& os, const Cache& cache) {
 	os << "Cache size: " << std::dec << cache.cache_size;
 	os << "; Block size: " << std::dec << cache.block_size;

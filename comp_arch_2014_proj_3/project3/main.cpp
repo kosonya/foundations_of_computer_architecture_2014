@@ -37,6 +37,7 @@ int main() {
 	for(current_cycle = 0; !std::cin.eof(); current_cycle++) {
 
 		std::cin >> instruction;
+		if (std::cin.eof()) break; //Fixing some wierd stuff with cin
 		std::cout << "Cycle: " << std::dec << current_cycle << std::endl;
 		std::cout << instruction << std::endl;
 		std::cout << "Block offset: " << std::hex << "0x" << test_cache -> get_block_offset(instruction.get_address());
@@ -44,23 +45,35 @@ int main() {
 		std::cout << "; Tag: " << std::hex << "0x" << test_cache -> get_tag(instruction.get_address()) << std::endl;
 		if (test_cache -> is_hit(instruction.get_address())) {
 			std::cout << "Hit, updating cycle counter"<< std::endl;
+
 			test_cache -> update_cycle_counter(instruction.get_address(), current_cycle);
+
 			std::cout << *test_cache << std::endl;
 
 		} else {
 			std::cout << "Miss, chechking if we can allocate a block without evictions"<< std::endl;
 			if(test_cache -> has_available_blocks(instruction.get_address())) {
 				std::cout << "Some space available, allocating" << std::endl;
+
 				test_cache -> allocate_block(instruction.get_address(), current_cycle);
+
 				std::cout << *test_cache << std::endl;
 			} else {
 				std::cout << "No available blocks, we need to evict something" << std::endl;
+
 				address_to_evict = test_cache -> find_lru_block(instruction.get_address());
+
 				std::cout << "Will evict the block with index 0x" << std::hex <<  test_cache -> get_index(address_to_evict);
 				std::cout << " and tag 0x" << std::hex << test_cache -> get_tag(address_to_evict) << std::endl;
+
+				test_cache -> evict_block(address_to_evict);
+				test_cache -> allocate_block(instruction.get_address(), current_cycle);
+
+				std::cout << *test_cache << std::endl;
+
 			}
 		}
-		std::cout << std::endl << std::endl;
+		std::cout << std::endl << std::endl << std::endl;
 
 	}
 

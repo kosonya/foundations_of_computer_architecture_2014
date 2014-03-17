@@ -20,6 +20,7 @@ class Cache
 		bool has_available_blocks(uint32_t address);
 		int update_cycle_counter(uint32_t address, uint64_t cycle); //returns -1 if block is not found; 0 if executed successfuly
 		int allocate_block(uint32_t address, uint64_t cycle); //returns -1 if no space is found; 0 if executed successfuly
+		int evict_block(uint32_t address); //returns -1 if block is not found; 0 if evicted successfuly
 
 
 		uint32_t find_lru_block(uint32_t address);
