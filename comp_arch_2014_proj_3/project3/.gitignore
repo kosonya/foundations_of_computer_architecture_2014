@@ -1,3 +1,8 @@
 cache_simulator
 *.o
 *.*~
+!*.cpp
+!*.hpp
+!*.txt
+!.gitignore
+!Makefile

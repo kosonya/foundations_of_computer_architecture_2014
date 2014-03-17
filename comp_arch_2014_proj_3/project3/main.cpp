@@ -49,7 +49,12 @@ int main() {
 			std::cout << *test_cache << std::endl;
 
 		} else {
-			std::cout << "Miss"<< std::endl;
+			std::cout << "Miss, chechking if we can allocate a block without evictions"<< std::endl;
+			if(test_cache -> has_available_blocks(instruction.get_address())) {
+				std::cout << "Some space available, allocating" << std::endl;
+			} else {
+				std::cout << "No available blocks, we need to evict something" << std::endl;
+			}
 		}
 		std::cout << std::endl << std::endl;
 
