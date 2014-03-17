@@ -64,6 +64,10 @@ int Cache::update_cycle_counter(uint32_t address, uint64_t cycle)
 	return sets[this -> get_index(address)].update_cycle_counter(this -> get_tag(address), cycle);
 }
 
+int Cache::allocate_block(uint32_t address, uint64_t cycle)
+{
+	return sets[this -> get_index(address)].allocate_block(this -> get_tag(address), cycle);
+}
 
 std::ostream& operator<<(std::ostream& os, const Cache& cache) {
 	os << "Cache size: " << std::dec << cache.cache_size;

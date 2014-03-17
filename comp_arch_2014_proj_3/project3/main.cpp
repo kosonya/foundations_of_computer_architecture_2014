@@ -26,12 +26,6 @@ int main() {
 	std::cout << cache_configurations << std::endl;
 	test_cache = new Cache(cache_configurations.i_cache);
 
-
-	test_cache -> sets[0x6].cache_blocks[0].tag = 0x200264;
-	test_cache -> sets[0x6].cache_blocks[0].is_available = false;
-	test_cache -> sets[0x6].available_blocks = 3;
-
-	//test_cache -> sets->clear();
 	std::cout << *test_cache << std::endl;
 
 
@@ -52,6 +46,8 @@ int main() {
 			std::cout << "Miss, chechking if we can allocate a block without evictions"<< std::endl;
 			if(test_cache -> has_available_blocks(instruction.get_address())) {
 				std::cout << "Some space available, allocating" << std::endl;
+				test_cache -> allocate_block(instruction.get_address(), current_cycle);
+				std::cout << *test_cache << std::endl;
 			} else {
 				std::cout << "No available blocks, we need to evict something" << std::endl;
 			}

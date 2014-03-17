@@ -68,6 +68,21 @@ bool Set::is_hit(uint32_t tag)
 	return false;
 }
 
+int Set::allocate_block(uint32_t tag, uint64_t cycle)
+{
+	for(std::vector<Cache_block>::iterator it = cache_blocks.begin(); it != cache_blocks.end(); ++it)
+	{
+		if(it -> is_available)
+		{
+			it -> is_available = false;
+			it -> tag = tag;
+			it -> last_used_cycle = cycle;
+			available_blocks--;
+			return 0;
+		}
+	}
+	return -1;
+}
 
 std::ostream& operator<<(std::ostream& os, const Set& set) {
 	os << "\t" << "Block size: " << std::dec << set.block_size;
