@@ -1,5 +1,5 @@
 CPPCOMPILER = g++
-CPPFLAGS = -Wall -std=gnu++0x
+CPPFLAGS = -Wall -std=gnu++0x -O3
 EXECUTABLE = cache_simulator
 OBJECTS = cache_block.o cache_configuration.o cache.o cache_statistics.o instruction.o main.o set.o
 
