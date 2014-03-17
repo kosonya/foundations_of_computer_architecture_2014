@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <bitset>
+#include <cstdint>
 
 Cache::Cache(Cache_Configuration config) {
 	Set set(config);
@@ -11,31 +12,45 @@ Cache::Cache(Cache_Configuration config) {
 	block_size = config.block_size;
 	associativity = config.associativity;
 	number_of_sets = cache_size / (block_size * associativity);
+	block_offset_bit_width = get_bit_width(block_size-1);
+	index_bit_width = get_bit_width(number_of_sets-1);
+	tag_bit_width = 32 - (index_bit_width + block_offset_bit_width);
 	for(unsigned i = 0; i < number_of_sets; i++) {
 		sets.push_back(set);
 	}
 }
 
-int Cache::get_bits(int size)
+unsigned int Cache::get_bit_width(unsigned int size)
 {
-	int count = 0;
-	while(size!= 1)
-	{
-		count++;
-		size = size/2;
+	unsigned int bit_width;
+	for(bit_width = 0; size > 0; bit_width++) {
+		size = size / 2;
 	}
-	return count;
+	return bit_width;
 }
 
 
-bool Cache::Is_hit(Instruction inst)
+uint32_t Cache::get_block_offset(uint32_t address)
 {
-	unsigned int index, tag, current_set;
-	uint32_t address;
-	address = inst.get_instruction_address();
+	return address % (1 << block_offset_bit_width);
+}
+
+uint32_t Cache::get_index(uint32_t address)
+{
+	return (address >> block_offset_bit_width) % (1 << index_bit_width);
+}
+
+uint32_t Cache::get_tag(uint32_t address)
+{
+	return (address >> (block_offset_bit_width + index_bit_width));
+}
+
+bool Cache::is_hit(uint32_t address)
+{
+	/*unsigned int index, tag, current_set;
     index = (address >> (Cache.get_bits(block_size))) % (1 << (Cache.get_bits(number_of_sets)));
     tag = address>>((Cache.get_bits(block_size))+ (Cache.get_bits(number_of_sets)));
-    /* Iterate through the sets */
+    //Iterate through the sets 
 	for(int i = 0; i < number_of_sets; i++)
 	{
 		if(index == sets[i])
@@ -43,7 +58,7 @@ bool Cache::Is_hit(Instruction inst)
 			current_set = sets[i];
 		}
 	}
-    /* Iterate through the cache blocks */
+    // Iterate through the cache blocks 
 	for(int i = 0; i < associativity; i++)
 	{
 		if(tag == current_set.cache_blocks[i].tag)
@@ -52,7 +67,7 @@ bool Cache::Is_hit(Instruction inst)
 			break;
 		}
 	}
-
+*/
 	return false;	   
 }
 
@@ -64,7 +79,10 @@ std::ostream& operator<<(std::ostream& os, const Cache& cache) {
 	os << "Cache size: " << cache.cache_size;
 	os << "; Block size: " << cache.block_size;
 	os << "; Associativity: " << cache.associativity;
-	os << "; Number of sets: " << cache.number_of_sets << std::endl;
+	os << "; Number of sets: " << cache.number_of_sets;
+	os << "; Block offset bits: " << cache.block_offset_bit_width;
+	os << "; Index bits: " << cache.index_bit_width;
+	os << "; Tag bits: " << cache.tag_bit_width << std::endl;
 	for(unsigned int index = 0; index < cache.sets.size(); index++) {
 		os << "Set " << std::hex << index << std::endl;
 		os << cache.sets[index];

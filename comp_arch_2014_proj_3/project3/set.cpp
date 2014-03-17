@@ -13,7 +13,7 @@ Set::Set(Cache_Configuration config) {
 	}
 }
 
-void Set::Evict_Cache_Block()
+void Set::evict_cache_block()
 {
 	uint64_t oldest_block;
 	 for(unsigned int i = 1; i < associativity; i++)
@@ -24,6 +24,8 @@ void Set::Evict_Cache_Block()
 	 	}
 	 }
 }
+
+
 Set::~Set() {
 	cache_blocks.clear();
 }

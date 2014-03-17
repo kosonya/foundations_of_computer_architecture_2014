@@ -12,7 +12,8 @@ class Set
 		Set(Cache_Configuration config);
 		~Set();
 		friend std::ostream& operator<<(std::ostream& os, const Set& set);
-//	private:
+		void evict_cache_block();
+	private:
 		unsigned int available_blocks;
 		unsigned int block_size;
 		unsigned int associativity;

@@ -6,7 +6,7 @@ Instruction::Instruction() {
 	address = 0xDEADBEEF;
 }
 
-uint32_t Instruction::get_instruction_address()
+uint32_t Instruction::get_address()
 {
 	return address;
 }

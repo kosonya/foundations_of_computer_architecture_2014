@@ -39,7 +39,7 @@ int main() {
 	std::cout << cache_configurations << std::endl;
 	test_cache = new Cache(cache_configurations.i_cache);
 	std::cout << *test_cache << std::endl;
-	delete test_cache;
+
 
 	for(current_cycle = 0; !std::cin.eof(); current_cycle++) {
 /*		std::cin >> command_type;
@@ -53,28 +53,35 @@ int main() {
 		std::cout << ", index: " << std::hex << index << ", tag: " << std::hex << tag << std::endl;
 */
 		std::cin >> instruction;
+		std::cout << "Cycle: " << current_cycle << std::endl;
 		std::cout << instruction << std::endl;
+		std::cout << "Block offset: " << test_cache -> get_block_offset(instruction.get_address());
+		std::cout << "; Index: " << test_cache -> get_index(instruction.get_address());
+		std::cout << "; Tag: " << test_cache -> get_tag(instruction.get_address()) << std::endl << std::endl;
 
 	}
 
+	delete test_cache;
+
 	/* Check if the instruction/data is present in L1, if not check in L2 */
-	Cache *L1_I, *L2_U, *L1_D;
+/*	Cache *L1_I, *L2_U, *L1_D;
+
 	Instruction_Type_t type = instruction.get_instruction_type();
 	uint32_t instruction_address = instruction.get_instruction_address();
 	if(type == PC)
 	{
-		if((L1_I.Is_hit(instruction)) == true)
+		if((L1_I -> is_hit(instruction)) == true)
 			{
-				/* Update L1 cache statistics */
+	//			 Update L1 cache statistics 
 			}
 		else
 		{
-			if(L2_U.Is_hit(instruction) == true)
+			if(L2_U -> is_hit(instruction) == true)
 			{
-				/* Update L2 Cache statistics */
+	//			 Update L2 Cache statistics
 			}
 		}
 	}
-
+*/
 	return 0;
 }
