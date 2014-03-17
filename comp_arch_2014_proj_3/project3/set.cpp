@@ -13,24 +13,43 @@ Set::Set(Cache_Configuration config) {
 	}
 }
 
+Set::~Set() {
+	cache_blocks.clear();
+}
+
 Cache_block Set::evict_cache_block()
 {
-	uint64_t oldest_block_cycle = cache_blocks[i - 1].last_used_cycle;
+	//uint64_t oldest_block_cycle = cache_blocks[i - 1].last_used_cycle;
+	uint64_t oldest_block_cycle = cache_blocks[0].last_used_cycle;
 	Cache_block oldest_block;
-	 for(unsigned int i = 1; i < associativity; i++)
+/*	unsigned int i;
+	 for(i = 1; i < associativity; i++)
 	 {
 	 	if(cache_blocks[i].last_used_cycle < oldest_block)
 	 	{
 	 		oldest_block_cycle = cache_blocks[i].last_used_cycle;
 	 		oldest_block = cache_blocks[i];
 	 	}
-	 }
+	 }*/
 	 return oldest_block;
 }
 
+bool Set::has_available_blocks()
+{
+	return available_blocks > 0;
+}
 
-Set::~Set() {
-	cache_blocks.clear();
+int Set::update_cycle_counter(uint32_t tag, uint64_t cycle)
+{
+	for(std::vector<Cache_block>::iterator it = cache_blocks.begin(); it != cache_blocks.end(); ++it)
+	{
+		if(it -> tag == tag && !(it -> is_available) )
+		{
+			it -> last_used_cycle = cycle;
+			return 0;
+		}
+	}
+	return -1;
 }
 
 bool Set::is_hit(uint32_t tag)

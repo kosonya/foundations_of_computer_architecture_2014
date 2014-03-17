@@ -17,6 +17,8 @@ class Cache
 		uint32_t get_index(uint32_t address);
 		uint32_t get_block_offset(uint32_t address);
 		uint32_t get_tag(uint32_t address);
+		bool has_available_blocks(uint32_t address);
+		int update_cycle_counter(uint32_t address, uint64_t cycle); //returns -1 if block is not found; 0 if executed successfuly
 		
 	//private:
 

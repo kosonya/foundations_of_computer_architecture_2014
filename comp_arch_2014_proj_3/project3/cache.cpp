@@ -54,6 +54,15 @@ bool Cache::is_hit(uint32_t address)
 	return sets[this -> get_index(address)].is_hit(this -> get_tag(address));	   
 }
 
+bool Cache::has_available_blocks(uint32_t address)
+{
+	return sets[this -> get_index(address)].has_available_blocks();
+}
+
+int Cache::update_cycle_counter(uint32_t address, uint64_t cycle)
+{
+	return sets[this -> get_index(address)].update_cycle_counter(this -> get_tag(address), cycle);
+}
 
 
 std::ostream& operator<<(std::ostream& os, const Cache& cache) {

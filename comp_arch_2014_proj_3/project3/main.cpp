@@ -44,9 +44,12 @@ int main() {
 		std::cout << "; Index: " << std::hex << "0x" << test_cache -> get_index(instruction.get_address());
 		std::cout << "; Tag: " << std::hex << "0x" << test_cache -> get_tag(instruction.get_address()) << std::endl;
 		if (test_cache -> is_hit(instruction.get_address())) {
-			std::cout << "Hit";
+			std::cout << "Hit, updating cycle counter"<< std::endl;
+			test_cache -> update_cycle_counter(instruction.get_address(), current_cycle);
+			std::cout << *test_cache << std::endl;
+
 		} else {
-			std::cout << "Miss";
+			std::cout << "Miss"<< std::endl;
 		}
 		std::cout << std::endl << std::endl;
 
