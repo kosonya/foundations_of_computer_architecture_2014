@@ -20,6 +20,10 @@ Cache::Cache(Cache_Configuration config) {
 	}
 }
 
+Cache::~Cache() {
+	sets.clear();
+}
+
 unsigned int Cache::get_bit_width(unsigned int size)
 {
 	unsigned int bit_width;
@@ -50,20 +54,18 @@ bool Cache::is_hit(uint32_t address)
 	return sets[this -> get_index(address)].is_hit(this -> get_tag(address));	   
 }
 
-Cache::~Cache() {
-	sets.clear();
-}
+
 
 std::ostream& operator<<(std::ostream& os, const Cache& cache) {
-	os << "Cache size: " << cache.cache_size;
-	os << "; Block size: " << cache.block_size;
-	os << "; Associativity: " << cache.associativity;
-	os << "; Number of sets: " << cache.number_of_sets;
-	os << "; Block offset bits: " << cache.block_offset_bit_width;
-	os << "; Index bits: " << cache.index_bit_width;
-	os << "; Tag bits: " << cache.tag_bit_width << std::endl;
+	os << "Cache size: " << std::dec << cache.cache_size;
+	os << "; Block size: " << std::dec << cache.block_size;
+	os << "; Associativity: " << std::dec << cache.associativity;
+	os << "; Number of sets: " << std::dec << cache.number_of_sets;
+	os << "; Block offset bits: " << std::dec << cache.block_offset_bit_width;
+	os << "; Index bits: " << std::dec << cache.index_bit_width;
+	os << "; Tag bits: " << std::dec << cache.tag_bit_width << std::endl;
 	for(unsigned int index = 0; index < cache.sets.size(); index++) {
-		os << "Set " << std::hex << index << std::endl;
+		os << "Set " << std::hex << "0x" << index << std::endl;
 		os << cache.sets[index];
 	}
 	return os;

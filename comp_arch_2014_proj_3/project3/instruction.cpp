@@ -31,7 +31,7 @@ std::ostream& operator<<(std::ostream& os, const Instruction& instruction) {
 		default:
 			os << "Unknown";
 	}
-	os << "; Address: " << std::hex << instruction.address;
+	os << "; Address: " << "0x" << std::hex << instruction.address;
 	return os;
 }
 

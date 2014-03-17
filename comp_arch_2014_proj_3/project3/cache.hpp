@@ -18,7 +18,7 @@ class Cache
 		uint32_t get_block_offset(uint32_t address);
 		uint32_t get_tag(uint32_t address);
 		
-	private:
+	//private:
 
 		unsigned int get_bit_width(unsigned int size);
 

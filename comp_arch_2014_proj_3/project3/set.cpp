@@ -48,9 +48,9 @@ bool Set::is_hit(uint32_t tag)
 
 
 std::ostream& operator<<(std::ostream& os, const Set& set) {
-	os << "\t" << "Block size: " << set.block_size;
-	os << "; Associativity: " << set.associativity;
-	os << "; Available blocks: " << set.available_blocks;
+	os << "\t" << "Block size: " << std::dec << set.block_size;
+	os << "; Associativity: " << std::dec << set.associativity;
+	os << "; Available blocks: " << std::dec << set.available_blocks;
 	os << std::endl << "\tBlocks:" << std::endl;
 	for(unsigned int block = 0; block < set.cache_blocks.size(); block++) {
 		os << "\t\t" << set.cache_blocks[block] << std::endl;

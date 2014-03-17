@@ -13,6 +13,7 @@ class Cache_Configuration {
 
 class Cache_Configurations {
 	public:
+		Cache_Configurations();
 		friend std::ostream& operator<<(std::ostream& os, const Cache_Configurations& cache_configurations);
 		friend std::istream& operator>>(std::istream& is, Cache_Configurations& cache_configurations);
 		Cache_Configuration i_cache, d_cache, l2_cache;

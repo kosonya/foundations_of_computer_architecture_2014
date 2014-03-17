@@ -14,7 +14,7 @@ class Set
 		friend std::ostream& operator<<(std::ostream& os, const Set& set);
 		void evict_cache_block();
 		bool is_hit(uint32_t tag);
-	private:
+	//private:
 		unsigned int available_blocks;
 		unsigned int block_size;
 		unsigned int associativity;
