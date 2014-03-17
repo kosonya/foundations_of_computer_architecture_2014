@@ -130,6 +130,8 @@ Cache_Access_Result cache_write(Cache *l1_cache, Cache *l2_cache, Instruction in
 		std::cout << "Updating cycle counter and dirty bit of the particular block" << std::endl;
 		l1_cache -> update_cycle_counter(instruction.get_address(), current_cycle);
 		l1_cache -> set_dirty_bit(instruction.get_address());
+		l2_cache -> set_dirty_bit(instruction.get_address());
+		l2_cache -> update_cycle_counter(instruction.get_address(), current_cycle);
 	}
 	else
 	{
@@ -146,7 +148,7 @@ Cache_Access_Result cache_write(Cache *l1_cache, Cache *l2_cache, Instruction in
 	
 		else 
 		{
-			std::cout << "L2-cache miss, allocaking a block" << std::endl;
+			std::cout << "L2-cache miss, allocating a block" << std::endl;
 			cache_access_result = store_block_in_cache_write(l2_cache, instruction, current_cycle, true);
 			if(cache_access_result.allocated_without_eviction) 
 			{
