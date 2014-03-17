@@ -1,10 +1,14 @@
 #ifndef _CACHE_STATISTICS_HPP_
 #define _CACHE_STATISTICS_HPP_ 0
 
+#include <string>
+
 class Cache_Statistics
 {
 	public:
 		Cache_Statistics();
+		friend std::ostream& operator<<(std::ostream& os, const Cache_Statistics& stats);
+		std::string prefix;
 		unsigned int accesses;
 		unsigned int misses;
 		unsigned int reads;
@@ -15,6 +19,7 @@ class Cache_Statistics
 		unsigned int dirty_writebacks;
 		unsigned int forced_clean_evictions;
 		unsigned int forced_dirty_evictions;
+		unsigned int checksum;
 };
 
 #endif
