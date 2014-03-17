@@ -52,6 +52,34 @@ bool Set::is_hit(uint32_t tag)
 	return false;
 }
 
+int Set::allocate_block_for_write(uint32_t tag, uint64_t cycle)
+{
+	for(std::vector<Cache_block>::iterator it = cache_blocks.begin(); it != cache_blocks.end(); ++it)
+	{
+		if(it -> is_available)
+		{
+			it -> is_available = false;
+			it -> tag = tag;
+			it -> last_used_cycle = cycle;
+			it -> dirty_bit = true;
+			available_blocks--;
+			return 0;
+		}
+	}
+	return -1;	
+}
+
+void Set::set_dirty_bit(uint32_t tag)
+{
+	for(std::vector<Cache_block>::iterator it = cache_blocks.begin(); it!= cache_blocks.end(); ++it)
+	{
+		if((it -> tag) == tag)
+		{
+			it->dirty_bit = true;
+		}
+	}
+}
+
 int Set::allocate_block(uint32_t tag, uint64_t cycle)
 {
 	for(std::vector<Cache_block>::iterator it = cache_blocks.begin(); it != cache_blocks.end(); ++it)
@@ -61,6 +89,7 @@ int Set::allocate_block(uint32_t tag, uint64_t cycle)
 			it -> is_available = false;
 			it -> tag = tag;
 			it -> last_used_cycle = cycle;
+			it -> valid_bit = true;
 			available_blocks--;
 			return 0;
 		}
@@ -88,9 +117,13 @@ uint32_t Set::find_lru_block()
 int Set::evict_block(uint32_t tag)
 {
 	for(std::vector<Cache_block>::iterator it = cache_blocks.begin(); it != cache_blocks.end(); ++it)
-	{
+	{		
 		if(it -> tag == tag)
 		{
+			if((it -> dirty_bit) == true)
+			{
+				//Write it back to memory
+			}
 			it -> is_available = true;
 			available_blocks++;
 			return 0;
