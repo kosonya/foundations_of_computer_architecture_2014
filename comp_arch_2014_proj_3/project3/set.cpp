@@ -149,6 +149,7 @@ int Set::evict_block(uint32_t tag)
 			}
 			it -> is_available = true;
 			it -> valid_bit = false;
+			it -> dirty_bit = false;
 			available_blocks++;
 			return 0;
 		}
