@@ -88,7 +88,8 @@ bool Set::get_dirty_bit(uint32_t tag)
 		{
 			return (it -> dirty_bit);
 		}
-	}	
+	}
+	return false;
 }
 
 int Set::allocate_block(uint32_t tag, uint64_t cycle)

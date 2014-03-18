@@ -25,8 +25,6 @@ int main() {
 	uint64_t current_cycle;
 	Cache_Configurations cache_configurations;
 	Instruction instruction;
-	uint64_t address_to_evict;
-	Cache_Access_Result cache_access_result;
 	Cache *i_cache, *d_cache, *l2_cache;
 
 
@@ -46,12 +44,9 @@ int main() {
 	d_cache = new Cache(cache_configurations.d_cache);
 	l2_cache = new Cache(cache_configurations.l2_cache);
 
-	std::string tmp("[L1-Inst]");
-	i_cache -> stats.prefix = tmp;
-	tmp = "[L1-Data]";
-	d_cache -> stats.prefix = tmp;
-	tmp = "[L2-Unif]";
-	l2_cache -> stats.prefix = tmp;	
+	i_cache -> stats.type = I;
+	d_cache -> stats.type = D;
+	l2_cache -> stats.type = L2;
 
 
 	for(current_cycle = 0; !std::cin.eof(); current_cycle++) {
@@ -88,13 +83,19 @@ int main() {
 		std::cout << std::endl << std::endl << std::endl;	
 	}
 
+	std::cout << "-------------------------------------------------------------------------------" << std::endl;
+	std::cout << i_cache -> stats << std::endl;
+	std::cout << "-------------------------------------------------------------------------------" << std::endl;
+	std::cout << d_cache -> stats << std::endl;
+	std::cout << "-------------------------------------------------------------------------------" << std::endl;
+	std::cout << l2_cache -> stats << std::endl;
+
 	return 0;
 }
 
 
 Cache_Access_Result cache_read(Cache *l1_cache, Cache *l2_cache, Instruction instruction, uint64_t current_cycle, bool show_debug_info) {
 	Cache_Access_Result cache_access_result;
-	uint64_t address_to_evict;
 	show_cache_tag_index_bo(l1_cache, instruction);
 	if (l1_cache -> is_hit(instruction.get_address())) 
 	{
@@ -153,7 +154,6 @@ Cache_Access_Result cache_read(Cache *l1_cache, Cache *l2_cache, Instruction ins
 Cache_Access_Result cache_write(Cache *l1_cache, Cache *l2_cache, Instruction instruction, uint64_t current_cycle, bool show_debug_info)
 {
 	Cache_Access_Result cache_access_result;
-	uint64_t address_to_evict;
 	show_cache_tag_index_bo(l1_cache, instruction);
 	if(l1_cache->is_hit(instruction.get_address()))
 	{
@@ -227,13 +227,13 @@ Cache_Access_Result store_block_in_cache(Cache *cache, Instruction instruction, 
 		}
 		res.allocated_without_eviction = true;
 	} else {
-		cache -> stats.clean_eviction++;
+		cache -> stats.clean_evictions++;
 		address_to_evict = cache -> find_lru_block(instruction.get_address());
 		cache -> evict_block(address_to_evict);
 		cache -> allocate_block(instruction.get_address(), current_cycle);
 		if((cache -> get_dirty_bit(address_to_evict)) == true)
 		{
-			cache -> stats.dirty_write_backs++;
+			cache -> stats.dirty_writebacks++;
 		}
 		res.evicted_address=address_to_evict;
 		if(show_debug_info) {
@@ -259,12 +259,12 @@ Cache_Access_Result store_block_in_cache_write(Cache *cache, Instruction instruc
 		}
 		res.allocated_without_eviction = true;
 	} else {
-		cache -> stats.clean_eviction++;
+		cache -> stats.clean_evictions++;
 		address_to_evict = cache -> find_lru_block(instruction.get_address());
 		cache -> evict_block(address_to_evict);
 		if((cache -> get_dirty_bit(address_to_evict)) == true)
 		{
-			cache -> stats.dirty_write_backs++;
+			cache -> stats.dirty_writebacks++;
 		}
 		cache -> allocate_block_for_write(instruction.get_address(), current_cycle);
 		res.evicted_address=address_to_evict;

@@ -11,7 +11,6 @@ class Cache_Statistics
 		Cache_Statistics();
 		friend std::ostream& operator<<(std::ostream& os, const Cache_Statistics& stats);
 		void reset();
-		std::string prefix;
 		Cache_Type_t type;
 		unsigned int accesses;
 		unsigned int misses;
@@ -21,6 +20,7 @@ class Cache_Statistics
 		unsigned int write_misses;
 		unsigned int clean_evictions;
 		unsigned int dirty_writebacks;
+		unsigned int forced_dirty_writebacks;
 		unsigned int forced_clean_evictions;
 		unsigned int forced_dirty_evictions;
 		unsigned int checksum;
