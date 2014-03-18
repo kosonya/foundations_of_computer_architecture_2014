@@ -44,7 +44,7 @@ bool Set::is_hit(uint32_t tag)
 	}
 	for(std::vector<Cache_block>::iterator it = cache_blocks.begin(); it != cache_blocks.end(); ++it)
 	{
-		if(it -> tag == tag && !(it -> is_available) )
+		if(it -> tag == tag && !(it -> is_available))
 		{
 			return true;
 		}
