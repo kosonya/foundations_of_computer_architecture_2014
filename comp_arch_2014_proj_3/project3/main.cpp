@@ -195,7 +195,12 @@ Cache_Access_Result cache_write(Cache *l1_cache, Cache *l2_cache, Instruction in
 				if (l1_cache -> is_hit(cache_access_result.evicted_address)) 
 				{
 					std::cout << "Evicted block found in L1, forcefully evicting" << std::endl;
+					l1_cache ->stats.forced_clean_evictions++;
 					l1_cache -> evict_block(cache_access_result.evicted_address);
+					if((l1_cache -> get_dirty_bit(cache_access_result.evicted_address)) == true)
+					{
+						l1_cache ->stats.forced_dirty_writebacks++;
+					}
 				} 
 				else 
 				{
@@ -254,8 +259,13 @@ Cache_Access_Result store_block_in_cache_write(Cache *cache, Instruction instruc
 		}
 		res.allocated_without_eviction = true;
 	} else {
+		cache -> stats.clean_eviction++;
 		address_to_evict = cache -> find_lru_block(instruction.get_address());
 		cache -> evict_block(address_to_evict);
+		if((cache -> get_dirty_bit(address_to_evict)) == true)
+		{
+			cache -> stats.dirty_write_backs++;
+		}
 		cache -> allocate_block_for_write(instruction.get_address(), current_cycle);
 		res.evicted_address=address_to_evict;
 		if(show_debug_info) {
