@@ -59,32 +59,32 @@ int main() {
 
 		std::cin >> instruction;
 		if (std::cin.eof()) break; //Fixing some wierd stuff with cin
-		std::cout << "Cycle: " << std::dec << current_cycle << std::endl;
-		std::cout << instruction << std::endl;
+	//	std::cout << "Cycle: " << std::dec << current_cycle << std::endl;
+	//	std::cout << instruction << std::endl;
 
 		switch(instruction.type) {
 			case PC:
-					std::cout << "I-cache" << std::endl;					
+	//				std::cout << "I-cache" << std::endl;					
 					cache_read(i_cache, d_cache, l2_cache, instruction, current_cycle, true);
 					i_cache->stats.accesses++;
 					
 					break;
 
 			case LOAD:
-					std::cout << "D-cache" << std::endl;
+	//				std::cout << "D-cache" << std::endl;
 					cache_read(d_cache, i_cache, l2_cache, instruction, current_cycle, true);
 					d_cache->stats.accesses++;
 				
 					break;
 			case STORE:
-					std::cout << "D-cache" << std::endl;
+	//				std::cout << "D-cache" << std::endl;
 					//show_cache_tag_index_bo(d_cache, instruction);
 					cache_write(d_cache, i_cache, l2_cache, instruction, current_cycle, true);
 					d_cache->stats.accesses++;
 					
 					break;
 		}
-		std::cout << std::endl << std::endl << std::endl;	
+	//	std::cout << std::endl << std::endl << std::endl;	
 	}
 
 	i_cache -> stats.checksum = i_cache -> checksum(0);
@@ -104,49 +104,49 @@ int main() {
 
 Cache_Access_Result cache_read(Cache *l1_cache, Cache *the_other_l1_cache, Cache *l2_cache, Instruction instruction, uint64_t current_cycle, bool show_debug_info) {
 	Cache_Access_Result cache_access_result;
-	show_cache_tag_index_bo(l1_cache, instruction);
+//	show_cache_tag_index_bo(l1_cache, instruction);
 	l1_cache->stats.reads++;
 	if (l1_cache -> is_hit(instruction.get_address())) 
 	{		
-		std::cout << "L1-cache hit, updating cycle counter" << std::endl;
+	//	std::cout << "L1-cache hit, updating cycle counter" << std::endl;
 		l1_cache -> update_cycle_counter(instruction.get_address(), current_cycle);
 	} 
 	else
 	{	
 		l1_cache -> stats.read_misses++;
 		l1_cache -> stats.misses++;
-		std::cout << "Miss, trying L2-cache" << std::endl;
+	//	std::cout << "Miss, trying L2-cache" << std::endl;
 		l2_cache -> stats.accesses++;
 		l2_cache -> stats.reads++;
 		
 		show_cache_tag_index_bo(l2_cache, instruction);
 		if (l2_cache -> is_hit(instruction.get_address())) 
 		{			
-			std::cout << "L2-cache hit, updating cycle counter" << std::endl;
+	//		std::cout << "L2-cache hit, updating cycle counter" << std::endl;
 			l2_cache -> update_cycle_counter(instruction.get_address(), current_cycle);
-			std::cout << "Allocating a block in L1-cache" << std::endl;
+	//		std::cout << "Allocating a block in L1-cache" << std::endl;
 			store_block_in_cache(l1_cache, instruction, current_cycle, true);
 		} 
 		else 
 		{
 			l2_cache -> stats.read_misses++;
 			l2_cache -> stats.misses++;
-			std::cout << "L2-cache miss, allocating a block" << std::endl;
+	//		std::cout << "L2-cache miss, allocating a block" << std::endl;
 			cache_access_result = store_block_in_cache(l2_cache, instruction, current_cycle, true);
 			if(cache_access_result.allocated_without_eviction) 
 			{
-				std::cout << "Block in L2 allocated without evictions, no force L1 evictions needed" << std::endl;
-				std::cout << "Checking if we can allocate a block in L1" << std::endl;
+	//			std::cout << "Block in L2 allocated without evictions, no force L1 evictions needed" << std::endl;
+	//			std::cout << "Checking if we can allocate a block in L1" << std::endl;
 				//cache_access_result = store_block_in_cache(l1_cache, instruction, current_cycle, true);
 				store_block_in_cache(l1_cache, instruction, current_cycle, true);
 			} 
 			else 
 			{
-				std::cout << "Block 0x" << std::hex << cache_access_result.evicted_address << " evicted from L2" << std::endl;
-				std::cout << "Checking if it's in L1" << std::endl;
+	//			std::cout << "Block 0x" << std::hex << cache_access_result.evicted_address << " evicted from L2" << std::endl;
+	//			std::cout << "Checking if it's in L1" << std::endl;
 				if (l1_cache -> is_hit(cache_access_result.evicted_address)) 
 				{
-					std::cout << "Evicted block found in L1, forcefully evicting" << std::endl;
+	//				std::cout << "Evicted block found in L1, forcefully evicting" << std::endl;
 					l1_cache -> stats.forced_clean_evictions++;
 					l1_cache -> evict_block(cache_access_result.evicted_address);
 					if((l1_cache -> get_dirty_bit(cache_access_result.evicted_address)) == true)
@@ -158,7 +158,7 @@ Cache_Access_Result cache_read(Cache *l1_cache, Cache *the_other_l1_cache, Cache
 				{
 					if (the_other_l1_cache -> is_hit(cache_access_result.evicted_address)) 
 					{
-						std::cout << "Evicted block found in L1, forcefully evicting" << std::endl;
+	//					std::cout << "Evicted block found in L1, forcefully evicting" << std::endl;
 						the_other_l1_cache -> stats.forced_clean_evictions++;
 						the_other_l1_cache -> evict_block(cache_access_result.evicted_address);
 						if((the_other_l1_cache -> get_dirty_bit(cache_access_result.evicted_address)) == true)
@@ -168,10 +168,10 @@ Cache_Access_Result cache_read(Cache *l1_cache, Cache *the_other_l1_cache, Cache
 					}
 					else
 					{
-						std::cout << "Evicted block not found in L1, no need for forced eviction" << std::endl;
+	//					std::cout << "Evicted block not found in L1, no need for forced eviction" << std::endl;
 					}
 				}
-				std::cout << "Checking if we can allocate a block in L1" << std::endl;
+	//			std::cout << "Checking if we can allocate a block in L1" << std::endl;
 				cache_access_result = store_block_in_cache(l1_cache, instruction, current_cycle, true);
 			}
 		}
@@ -182,11 +182,11 @@ Cache_Access_Result cache_read(Cache *l1_cache, Cache *the_other_l1_cache, Cache
 Cache_Access_Result cache_write(Cache *l1_cache, Cache *the_other_l1_cache, Cache *l2_cache, Instruction instruction, uint64_t current_cycle, bool show_debug_info)
 {
 	Cache_Access_Result cache_access_result;
-	show_cache_tag_index_bo(l1_cache, instruction);
+//	show_cache_tag_index_bo(l1_cache, instruction);
 	l1_cache->stats.writes++;
 	if(l1_cache->is_hit(instruction.get_address()))
 	{		
-		std::cout << "Updating cycle counter and dirty bit of the particular block" << std::endl;
+	//	std::cout << "Updating cycle counter and dirty bit of the particular block" << std::endl;
 		l1_cache -> update_cycle_counter(instruction.get_address(), current_cycle);
 		l1_cache -> set_dirty_bit(instruction.get_address());
 		l2_cache -> set_dirty_bit(instruction.get_address());
@@ -196,16 +196,16 @@ Cache_Access_Result cache_write(Cache *l1_cache, Cache *the_other_l1_cache, Cach
 	{
 		l1_cache->stats.write_misses++;
 		l1_cache->stats.misses++;
-		std::cout << "L1 cache miss - trying L2 cache" << std::endl;
+	//	std::cout << "L1 cache miss - trying L2 cache" << std::endl;
 		l2_cache -> stats.accesses++;
 		l2_cache ->stats.writes++;		
-		show_cache_tag_index_bo(l2_cache, instruction);
+	//	show_cache_tag_index_bo(l2_cache, instruction);
 		if(l2_cache->is_hit(instruction.get_address()))
 		{			
-			std::cout << "L2-cache hit, updating cycle counter and dirty bit" << std::endl;
+//			std::cout << "L2-cache hit, updating cycle counter and dirty bit" << std::endl;
 			l2_cache -> update_cycle_counter(instruction.get_address(), current_cycle);
 			l2_cache -> set_dirty_bit(instruction.get_address());
-			std::cout << "Allocating a block in L1-cache" << std::endl;
+//			std::cout << "Allocating a block in L1-cache" << std::endl;
 			store_block_in_cache_write(l1_cache, instruction, current_cycle, true);
 		}
 	
@@ -213,21 +213,21 @@ Cache_Access_Result cache_write(Cache *l1_cache, Cache *the_other_l1_cache, Cach
 		{
 			l2_cache->stats.write_misses++;
 			l2_cache->stats.misses++;
-			std::cout << "L2-cache miss, allocating a block" << std::endl;
+//			std::cout << "L2-cache miss, allocating a block" << std::endl;
 			cache_access_result = store_block_in_cache_write(l2_cache, instruction, current_cycle, true);
 			if(cache_access_result.allocated_without_eviction) 
 			{
-				std::cout << "Block in L2 allocated without evictions, no force L1 evictions needed" << std::endl;
-				std::cout << "Checking if we can allocate a block in L1" << std::endl;
+//				std::cout << "Block in L2 allocated without evictions, no force L1 evictions needed" << std::endl;
+//				std::cout << "Checking if we can allocate a block in L1" << std::endl;
 				cache_access_result = store_block_in_cache_write(l1_cache, instruction, current_cycle, true);
 	    	}
 			else 
 			{
-				std::cout << "Block 0x" << std::hex << cache_access_result.evicted_address << " evicted from L2" << std::endl;
-				std::cout << "Checking if it's in L1" << std::endl;
+//				std::cout << "Block 0x" << std::hex << cache_access_result.evicted_address << " evicted from L2" << std::endl;
+//				std::cout << "Checking if it's in L1" << std::endl;
 				if (l1_cache -> is_hit(cache_access_result.evicted_address)) 
 				{
-					std::cout << "Evicted block found in L1, forcefully evicting" << std::endl;
+//					std::cout << "Evicted block found in L1, forcefully evicting" << std::endl;
 					l1_cache ->stats.forced_clean_evictions++;
 					l1_cache -> evict_block(cache_access_result.evicted_address);
 					if((l1_cache -> get_dirty_bit(cache_access_result.evicted_address)) == true)
@@ -239,7 +239,7 @@ Cache_Access_Result cache_write(Cache *l1_cache, Cache *the_other_l1_cache, Cach
 				{
 					if (the_other_l1_cache -> is_hit(cache_access_result.evicted_address)) 
 					{
-						std::cout << "Evicted block found in L1, forcefully evicting" << std::endl;
+//						std::cout << "Evicted block found in L1, forcefully evicting" << std::endl;
 						the_other_l1_cache -> stats.forced_clean_evictions++;
 						the_other_l1_cache -> evict_block(cache_access_result.evicted_address);
 						if((the_other_l1_cache -> get_dirty_bit(cache_access_result.evicted_address)) == true)
@@ -249,10 +249,10 @@ Cache_Access_Result cache_write(Cache *l1_cache, Cache *the_other_l1_cache, Cach
 					}
 					else
 					{
-						std::cout << "Evicted block not found in L1, no need for forced eviction" << std::endl;
+//						std::cout << "Evicted block not found in L1, no need for forced eviction" << std::endl;
 					}
 				}
-				std::cout << "Checking if we can allocate a block in L1" << std::endl;
+//				std::cout << "Checking if we can allocate a block in L1" << std::endl;
 				cache_access_result = store_block_in_cache_write(l1_cache, instruction, current_cycle, true);
 			}
 		}
@@ -268,7 +268,7 @@ Cache_Access_Result store_block_in_cache(Cache *cache, Instruction instruction, 
 	if(cache -> has_available_blocks(instruction.get_address())) {
 		cache -> allocate_block(instruction.get_address(), current_cycle);
 		if(show_debug_info) {
-			std::cout << "Some space available, allocating" << std::endl;
+//			std::cout << "Some space available, allocating" << std::endl;
 			//std::cout << *cache << std::endl;
 		}
 		res.allocated_without_eviction = true;
@@ -283,9 +283,9 @@ Cache_Access_Result store_block_in_cache(Cache *cache, Instruction instruction, 
 		}
 		res.evicted_address=address_to_evict;
 		if(show_debug_info) {
-			std::cout << "No available blocks, we need to evict something" << std::endl;
-			std::cout << "Will evict the block with index 0x" << std::hex <<  cache -> get_index(address_to_evict);
-			std::cout << " and tag 0x" << std::hex << cache -> get_tag(address_to_evict) << std::endl;
+//			std::cout << "No available blocks, we need to evict something" << std::endl;
+//			std::cout << "Will evict the block with index 0x" << std::hex <<  cache -> get_index(address_to_evict);
+//			std::cout << " and tag 0x" << std::hex << cache -> get_tag(address_to_evict) << std::endl;
 			//std::cout << *cache << std::endl;
 		}
 		res.allocated_without_eviction = false;
@@ -300,7 +300,7 @@ Cache_Access_Result store_block_in_cache_write(Cache *cache, Instruction instruc
 	if(cache -> has_available_blocks(instruction.get_address())) {
 		cache -> allocate_block_for_write(instruction.get_address(), current_cycle);
 		if(show_debug_info) {
-			std::cout << "Some space available, allocating" << std::endl;
+//			std::cout << "Some space available, allocating" << std::endl;
 			//std::cout << *cache << std::endl;
 		}
 		res.allocated_without_eviction = true;
@@ -315,9 +315,9 @@ Cache_Access_Result store_block_in_cache_write(Cache *cache, Instruction instruc
 		cache -> allocate_block_for_write(instruction.get_address(), current_cycle);
 		res.evicted_address=address_to_evict;
 		if(show_debug_info) {
-			std::cout << "No available blocks, we need to evict something" << std::endl;
-			std::cout << "Will evict the block with index 0x" << std::hex <<  cache -> get_index(address_to_evict);
-			std::cout << " and tag 0x" << std::hex << cache -> get_tag(address_to_evict) << std::endl;
+//			std::cout << "No available blocks, we need to evict something" << std::endl;
+//			std::cout << "Will evict the block with index 0x" << std::hex <<  cache -> get_index(address_to_evict);
+//			std::cout << " and tag 0x" << std::hex << cache -> get_tag(address_to_evict) << std::endl;
 			//std::cout << *cache << std::endl;
 			}
 		res.allocated_without_eviction = false;

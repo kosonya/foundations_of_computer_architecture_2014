@@ -1,5 +1,6 @@
 #include "instruction.hpp"
 #include <iostream>
+#include <cstdint>
 
 Instruction::Instruction() {
 	type = PC;
@@ -37,6 +38,7 @@ std::ostream& operator<<(std::ostream& os, const Instruction& instruction) {
 
 std::istream& operator>>(std::istream& is, Instruction& instruction){
 	int tmp;
+	uint64_t tmpint;
 	is >> tmp;
 	switch (tmp) {
 		case 0:
@@ -51,6 +53,8 @@ std::istream& operator>>(std::istream& is, Instruction& instruction){
 		default:
 			;//TODO
 	}
-	is >> std::hex >> instruction.address;
+	
+	is >> std::hex >> tmpint;
+	instruction.address = tmpint;
 	return is;
 }
