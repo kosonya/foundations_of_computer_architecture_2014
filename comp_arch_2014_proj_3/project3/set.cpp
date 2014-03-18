@@ -148,6 +148,7 @@ int Set::evict_block(uint32_t tag)
 				//Write it back to memory
 			}
 			it -> is_available = true;
+			it -> valid_bit = false;
 			available_blocks++;
 			return 0;
 		}
