@@ -51,6 +51,12 @@ int main() {
 
 	for(current_cycle = 0; !std::cin.eof(); current_cycle++) {
 
+		if(current_cycle == cache_configurations.start_counting_after) {
+			i_cache -> stats.reset();
+			d_cache -> stats.reset();
+			l2_cache -> stats.reset();
+		}
+
 		std::cin >> instruction;
 		if (std::cin.eof()) break; //Fixing some wierd stuff with cin
 		std::cout << "Cycle: " << std::dec << current_cycle << std::endl;
