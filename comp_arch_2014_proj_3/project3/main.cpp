@@ -63,21 +63,21 @@ int main() {
 					std::cout << "I-cache" << std::endl;					
 					cache_read(i_cache, l2_cache, instruction, current_cycle, true);
 					i_cache->stats.accesses++;
-					i_cache->stats.reads++;
+					
 					break;
 
 			case LOAD:
 					std::cout << "D-cache" << std::endl;
 					cache_read(d_cache, l2_cache, instruction, current_cycle, true);
 					d_cache->stats.accesses++;
-					d_cache->stats.reads++;
+				
 					break;
 			case STORE:
 					std::cout << "D-cache" << std::endl;
 					//show_cache_tag_index_bo(d_cache, instruction);
 					cache_write(d_cache, l2_cache, instruction, current_cycle, true);
 					d_cache->stats.accesses++;
-					d_cache->stats.writes++;
+					
 					break;
 		}
 		std::cout << std::endl << std::endl << std::endl;	
@@ -97,18 +97,23 @@ int main() {
 Cache_Access_Result cache_read(Cache *l1_cache, Cache *l2_cache, Instruction instruction, uint64_t current_cycle, bool show_debug_info) {
 	Cache_Access_Result cache_access_result;
 	show_cache_tag_index_bo(l1_cache, instruction);
+	l1_cache->stats.reads++;
 	if (l1_cache -> is_hit(instruction.get_address())) 
-	{
+	{		
 		std::cout << "L1-cache hit, updating cycle counter" << std::endl;
 		l1_cache -> update_cycle_counter(instruction.get_address(), current_cycle);
 	} 
 	else
 	{	
 		l1_cache -> stats.read_misses++;
+		l1_cache -> stats.misses++;
 		std::cout << "Miss, trying L2-cache" << std::endl;
+		l2_cache -> stats.accesses++;
+		l2_cache -> stats.reads++;
+		
 		show_cache_tag_index_bo(l2_cache, instruction);
 		if (l2_cache -> is_hit(instruction.get_address())) 
-		{
+		{			
 			std::cout << "L2-cache hit, updating cycle counter" << std::endl;
 			l2_cache -> update_cycle_counter(instruction.get_address(), current_cycle);
 			std::cout << "Allocating a block in L1-cache" << std::endl;
@@ -117,6 +122,7 @@ Cache_Access_Result cache_read(Cache *l1_cache, Cache *l2_cache, Instruction ins
 		else 
 		{
 			l2_cache -> stats.read_misses++;
+			l2_cache -> stats.misses++;
 			std::cout << "L2-cache miss, allocaking a block" << std::endl;
 			cache_access_result = store_block_in_cache(l2_cache, instruction, current_cycle, true);
 			if(cache_access_result.allocated_without_eviction) 
@@ -155,8 +161,9 @@ Cache_Access_Result cache_write(Cache *l1_cache, Cache *l2_cache, Instruction in
 {
 	Cache_Access_Result cache_access_result;
 	show_cache_tag_index_bo(l1_cache, instruction);
+	l1_cache->stats.writes++;
 	if(l1_cache->is_hit(instruction.get_address()))
-	{
+	{		
 		std::cout << "Updating cycle counter and dirty bit of the particular block" << std::endl;
 		l1_cache -> update_cycle_counter(instruction.get_address(), current_cycle);
 		l1_cache -> set_dirty_bit(instruction.get_address());
@@ -166,10 +173,13 @@ Cache_Access_Result cache_write(Cache *l1_cache, Cache *l2_cache, Instruction in
 	else
 	{
 		l1_cache->stats.write_misses++;
+		l1_cache->stats.misses++;
 		std::cout << "L1 cache miss - trying L2 cache" << std::endl;
+		l2_cache -> stats.accesses++;
+		l2_cache ->stats.writes++;		
 		show_cache_tag_index_bo(l2_cache, instruction);
 		if(l2_cache->is_hit(instruction.get_address()))
-		{
+		{			
 			std::cout << "L2-cache hit, updating cycle counter and dirty bit" << std::endl;
 			l2_cache -> update_cycle_counter(instruction.get_address(), current_cycle);
 			l2_cache -> set_dirty_bit(instruction.get_address());
@@ -180,6 +190,7 @@ Cache_Access_Result cache_write(Cache *l1_cache, Cache *l2_cache, Instruction in
 		else 
 		{
 			l2_cache->stats.write_misses++;
+			l2_cache->stats.misses++;
 			std::cout << "L2-cache miss, allocating a block" << std::endl;
 			cache_access_result = store_block_in_cache_write(l2_cache, instruction, current_cycle, true);
 			if(cache_access_result.allocated_without_eviction) 
