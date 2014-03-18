@@ -126,6 +126,17 @@ uint32_t Set::find_lru_block()
 
 }
 
+unsigned long Set::checksum(unsigned long seed) {
+	for(std::vector<Cache_block>::iterator it = cache_blocks.begin(); it != cache_blocks.end(); ++it)
+	{
+		if( !(it -> is_available) )
+		{
+			seed = seed ^ (( (it -> tag) << 2) | ( (it -> valid_bit) << 1) | (it -> dirty_bit));
+		}
+	}
+	return seed;
+}
+
 int Set::evict_block(uint32_t tag)
 {
 	for(std::vector<Cache_block>::iterator it = cache_blocks.begin(); it != cache_blocks.end(); ++it)

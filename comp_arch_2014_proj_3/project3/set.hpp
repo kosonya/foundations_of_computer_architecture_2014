@@ -21,6 +21,7 @@ class Set
 		int allocate_block_for_write(uint32_t tag, uint64_t cycle);
 		void set_dirty_bit(uint32_t tag);
 		bool get_dirty_bit(uint32_t tag);
+		unsigned long checksum(unsigned long seed);
 	private:
 		unsigned int available_blocks;
 		unsigned int block_size;

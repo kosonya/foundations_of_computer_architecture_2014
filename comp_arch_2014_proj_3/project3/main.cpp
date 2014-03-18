@@ -87,6 +87,10 @@ int main() {
 		std::cout << std::endl << std::endl << std::endl;	
 	}
 
+	i_cache -> stats.checksum = i_cache -> checksum(0);
+	d_cache -> stats.checksum = d_cache -> checksum(0);
+	l2_cache -> stats.checksum = l2_cache -> checksum(0);
+
 	std::cout << "-------------------------------------------------------------------------------" << std::endl;
 	std::cout << i_cache -> stats << std::endl;
 	std::cout << "-------------------------------------------------------------------------------" << std::endl;

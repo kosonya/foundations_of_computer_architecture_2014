@@ -26,7 +26,7 @@ class Cache
 		int allocate_block_for_write(uint32_t address, uint64_t cycle);
 		void set_dirty_bit(uint32_t address);
 		bool get_dirty_bit(uint32_t address);
-
+		unsigned long checksum(unsigned long seed);
 		uint32_t find_lru_block(uint32_t address);
 		//returns the address (with block offset bits all equal to 0) of the least recently used block
 		//within the set where the input address could be put

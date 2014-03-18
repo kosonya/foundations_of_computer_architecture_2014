@@ -95,6 +95,13 @@ int Cache::evict_block(uint32_t address)
 	return sets[this -> get_index(address)].evict_block(this -> get_tag(address));
 }
 
+unsigned long Cache::checksum(unsigned long seed) {
+	for(std::vector<Set>::iterator it = sets.begin(); it != sets.end(); ++it) {
+		seed = it -> checksum(seed);
+	}
+	return seed;
+}
+
 std::ostream& operator<<(std::ostream& os, const Cache& cache) {
 	os << "Cache size: " << std::dec << cache.cache_size;
 	os << "; Block size: " << std::dec << cache.block_size;
