@@ -18,7 +18,29 @@ Cache_Statistics::Cache_Statistics() {
 	checksum = 0;
 }
 
+void Cache_Statistics::reset() {
+	std::string tmp("");
+	prefix = tmp;
+	accesses = 0;
+	misses = 0;
+	reads = 0;
+	read_misses = 0;
+	writes = 0;
+	write_misses = 0;
+	clean_evictions = 0;
+	dirty_writebacks = 0;
+	forced_clean_evictions = 0;
+	forced_dirty_evictions = 0;
+	checksum = 0;
+}
+
 std::ostream& operator<<(std::ostream& os, const Cache_Statistics& stats) {
+	std::string prefix;
+	switch(stats.type) {
+		case 0:
+		break;
+
+	}
 	os << stats.prefix << " Accesses: " << std::dec << stats.acceses << std::endl;
 	os << stats.prefix << " Misses: " << std::dec << stats.misses << std::endl;
 	os << std::endl;

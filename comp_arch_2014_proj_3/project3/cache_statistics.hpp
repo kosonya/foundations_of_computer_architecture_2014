@@ -3,12 +3,16 @@
 
 #include <string>
 
+enum Cache_Type_t {I = 0, D = 1, L2 = 2};
+
 class Cache_Statistics
 {
 	public:
 		Cache_Statistics();
 		friend std::ostream& operator<<(std::ostream& os, const Cache_Statistics& stats);
+		void reset();
 		std::string prefix;
+		Cache_Type_t type;
 		unsigned int accesses;
 		unsigned int misses;
 		unsigned int reads;
