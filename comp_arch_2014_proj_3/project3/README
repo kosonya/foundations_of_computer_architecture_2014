@@ -1,6 +1,53 @@
-Group Members:
-Berkin Akin		bakin@andrew.cmu.edu
+------------------------------------------------------------------------------------------
 
+ README
 
-Issues:
-None so far.
+ Description:
+ Two level trace-driven cache simulator.
+
+------------------------------------------------------------------------------------------
+1. Authors
+------------------------------------------------------------------------------------------
+
+ 1. Maxim Kovalev ( mkovalev@andrew.cmu.edu / maxim.kovalev@west.cmu.edu )
+
+ 2. Mridula Chappalli Srinivasa ( mchappal@andrew.cmu.edu / mridula.chappalli.srinivasa@sv.cmu.edu )
+
+------------------------------------------------------------------------------------------
+2. Overview
+------------------------------------------------------------------------------------------
+
+All the source code for this submission is written in C++0x
+The project is built by Makefile.
+
+------------------------------------------------------------------------------------------
+3. Compiling
+------------------------------------------------------------------------------------------
+
+To compile this project type "make" in its working directory. This ouputs
+an executable file "cache_simualtor".
+
+------------------------------------------------------------------------------------------
+3. Running
+------------------------------------------------------------------------------------------
+
+cache_simualtor reads traces from stdin. Thus, to run it you can type:
+
+ 1. ./cache_simulator < <paht_to_traces>/<plain_text_trace>
+
+ 2. cat <paht_to_traces>/<plain_text_trace> | ./cache_simulator
+
+ 3. zcat <paht_to_traces>/<compressed_trace>.gz | ./cache_simulator
+
+Our code chacks for a file "config.default" in the current directory
+(thus, you should run cache_simulator in its directory rather than outside of it
+e.g. "cat <trace_file> | <path_to_simulator>/cache_simulator"), and if this file
+exists then the configuration is loaded; otherwise a default hardcoded config is used.
+
+------------------------------------------------------------------------------------------
+4. Issues
+------------------------------------------------------------------------------------------
+
+Apparently incorrect number of forces/clean evictions/writebacks. Since the final state
+of the cache given by its checksum appears to be correct, that is probably an issue of 
+collecting statistics rather than the actual execution.
