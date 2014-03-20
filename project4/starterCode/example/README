@@ -1,0 +1,105 @@
+------------------------------------------------------------------------------------------
+
+ README
+ Copyright (C) 2005 Carnegie Mellon University
+
+ Description:
+ Project 2 Startup code (C++)
+ 
+ Revision history
+ 9-25-2005, Eric Chung
+ 3-7-2014, Yu Wang
+
+
+------------------------------------------------------------------------------------------
+Introduction
+------------------------------------------------------------------------------------------
+
+This document contains instructions on getting started with Project 4
+using C++. This package should contain the following files:
+
+Makefile, README
+
+Wiring.cpp
+
+CacheArray.{h, o}
+CacheController.{h, o}
+PrefetchBuffer.{h, o}
+
+CompetitionPrefetcher.cpp / ExamplePrefetcher.cpp / StridePrefetcher.cpp
+
+config.default
+
+------------------------------------------------------------------------------------------
+Overview
+------------------------------------------------------------------------------------------
+
+In this package, we are including a complete C++ cache simulator which has the same functionality
+as in project 1. Included are a set of extensions that will allow you to interface your own
+prefetcher as well as any auxiliary structures (see spec-sheet handout for what these are). 
+You will not be permitted to make any changes to our cache simulator in order to guarantee
+an agreed-upon model for all students in the competition. 
+
+
+
+------------------------------------------------------------------------------------------
+Makefile settings
+------------------------------------------------------------------------------------------
+
+Inside the Makefile, there are several flags you can use to adjust settings:
+
+
+CFLAGS         -- compiler optimizations (shouldn't need to change)
+DEBUG	       -- prints out normal cache-related traces from the cache simulator
+DEBUG_PF       -- prints out prefetcher-related traces (from our simulator and yours if you want)
+ASSERT	       -- enables assertions (disable for faster simulation) 
+DUMP_INTERVAL  -- dump statistics every N references processed
+ENABLE_PF      -- enable prefetching (comment out for prefetching)
+HIST	       -- a defined value you should specify in your strided prefetcher
+                  (this is the number of history entries you use in your strided prefetcher)
+AUX_SIZE       -- number of entries you want for an auxiliary structure (0 for none)
+
+
+-- Only 1 of the following flags should be uncommented out
+
+EN_DM_AUX      -- use a direct-mapped prefetch buffer
+EN_FIFO_AUX    -- use a fully-associative FIFO replacement prefetch buffer
+EN_RAND_AUX    -- use a fully-associative RANDOM replacement prefetch buffer
+
+
+*** WARNING: You should not modify the CacheArray, CacheController, Wiring, and the PrefetchBuffer 
+object or header files for this project ***
+
+
+
+
+------------------------------------------------------------------------------------------
+Getting started
+------------------------------------------------------------------------------------------
+
+To build the example prefetcher, type "make example"
+The generated executable should be named "pf_example". This example prefetcher simply
+examines every memory reference and prefetches the next block in an alternating manner 
+into the L2 cache directly or into an auxiliary buffer (you can choose which type in the Makefile).
+
+Skeleton code for the Strided Prefetcher and the Competition Prefetcher has been provided
+under StridedPrefetcher.{cpp, h} and CompetitionPrefetcher.{cpp, h}. You are allowed to
+modify any of these files.
+
+To build your Strided Prefetcher, type "make strided". This generates the executable
+"pf_strided".
+
+To build your Competition Prefetcher, type "make competition". This generates the executable
+"pf_competition".
+
+
+
+At the end of any simulation, our cache simulator will produce various statistics on L1, L2,
+and the amount of bandwidth generated in total by your prefetcher and the L2 cache to memory. 
+The number of L2 misses, the bandwidth, and the cost (which you have to report) will
+be used to compute your overall prefetcher score.
+
+------------------------------------------------------------------------------------------
+Please don't hesitate to ask your TAs if you have any questions or uncertainties. 
+
+GOOD LUCK!
